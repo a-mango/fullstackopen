@@ -1,5 +1,6 @@
 # Single page app
 
+```
 browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa
 server-->browser: HTML-code
 browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
@@ -19,3 +20,4 @@ note over browser:
 browser executes the event handler
 that renders notes to display
 end note
+```

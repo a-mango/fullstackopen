@@ -1,5 +1,6 @@
 # new note spa
 
+```
 browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa
 server-->browser: HTML-code
 browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
@@ -31,3 +32,4 @@ end note
 
 browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
 server->browser: HTTP status code 201 Created
+```

@@ -1,5 +1,6 @@
 # new note
 
+```
 browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/notes
 server-->browser: HTML-code
 browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
@@ -34,3 +35,4 @@ browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
 server-->browser: main.css
 browser->server: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.js
 server-->browser: main.js
+```
