@@ -3,14 +3,15 @@ import ReactDOM from "react-dom";
 
 const Header = ({ text }) => <h1>{text}</h1>;
 
-const Statistic = (props) => (
-  <div>
-    {props.label} {props.value}
-  </div>
+const Statistic = ({ text, value }) => (
+  <tr>
+    <td>{text}</td>
+    <td>{value}</td>
+  </tr>
 );
 
-const Button = (props) => (
-  <button onClick={props.handleClick}>{props.text}</button>
+const Button = ({ handleClick, text }) => (
+  <button onClick={handleClick}>{text}</button>
 );
 
 const Statistics = ({ good, neutral, bad }) => {
@@ -32,12 +33,16 @@ const Statistics = ({ good, neutral, bad }) => {
   return (
     <div>
       <Header text="statistics" />
-      <Statistic label="good" value={good} />
-      <Statistic label="neutral" value={neutral} />
-      <Statistic label="bad" value={bad} />
-      <Statistic label="all" value={total} />
-      <Statistic label="average" value={average()} />
-      <Statistic label="positive" value={percentage()} />
+      <table>
+        <tbody>
+          <Statistic text="good" value={good} />
+          <Statistic text="neutral" value={neutral} />
+          <Statistic text="bad" value={bad} />
+          <Statistic text="all" value={total} />
+          <Statistic text="average" value={average()} />
+          <Statistic text="positive" value={percentage()} />
+        </tbody>
+      </table>
     </div>
   );
 };
