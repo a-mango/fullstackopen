@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
+const Header = ({ text }) => <h1>{text}</h1>;
+
 const Statistic = (props) => (
   <div>
     {props.label} {props.value}
@@ -12,7 +14,21 @@ const Button = (props) => (
 );
 
 const Statistics = ({ good, neutral, bad }) => {
-  return <div></div>;
+  const total = good + neutral + bad;
+  const average = () => (good - bad) / total;
+  const percentage = () => `${(100 * good) / total} %`;
+
+  return (
+    <div>
+      <Header text="statistics" />
+      <Statistic label="good" value={good} />
+      <Statistic label="neutral" value={neutral} />
+      <Statistic label="bad" value={bad} />
+      <Statistic label="all" value={total} />
+      <Statistic label="average" value={average()} />
+      <Statistic label="positive" value={percentage()} />
+    </div>
+  );
 };
 
 const App = () => {
@@ -31,10 +47,6 @@ const App = () => {
     setBad(bad + 1);
   };
 
-  const total = good + neutral + bad;
-  const average = () => (good - bad) / total;
-  const percentage = () => `${(100 * good) / total} %`;
-
   return (
     <div>
       <div>
@@ -43,15 +55,7 @@ const App = () => {
         <Button handleClick={handleNeutralClick} text="neutral" />
         <Button handleClick={handleBadClick} text="bad" />
       </div>
-      <div>
-        <h2>statistics</h2>
-        <Statistic label="good" value={good} />
-        <Statistic label="neutral" value={neutral} />
-        <Statistic label="bad" value={bad} />
-        <Statistic label="all" value={total} />
-        <Statistic label="average" value={average()} />
-        <Statistic label="positive" value={percentage()} />
-      </div>
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
   );
 };
