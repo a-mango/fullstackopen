@@ -15,6 +15,17 @@ const Button = (props) => (
 
 const Statistics = ({ good, neutral, bad }) => {
   const total = good + neutral + bad;
+
+  // If no feedback was given return informative component
+  if (total <= 0) {
+    return (
+      <div>
+        <Header text="statistics" />
+        <p>No feedback given</p>
+      </div>
+    );
+  }
+
   const average = () => (good - bad) / total;
   const percentage = () => `${(100 * good) / total} %`;
 
@@ -50,7 +61,7 @@ const App = () => {
   return (
     <div>
       <div>
-        <h2>give feedback</h2>
+        <Header text="give feedback" />
         <Button handleClick={handleGoodClick} text="good" />
         <Button handleClick={handleNeutralClick} text="neutral" />
         <Button handleClick={handleBadClick} text="bad" />
