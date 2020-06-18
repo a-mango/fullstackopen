@@ -1,13 +1,18 @@
 # FullStackOpen 2020 by amango
 
-Course started on 06.06.2020
+This repository contains my submissions for [Full Stack Open 2020](https://fullstackopen.com/en) by the University of Helsinki. This course is an introduction to modern web app development with React, Redux, Node.js, MongoDB, GraphQL and TypeScript.
 
 ## Timeline
 
-Part 0 Done 07.06.2020  
-Part 1 In progress
+Course started on 06.06.2020
 
-## Commands
+| Part  | Date finished  |
+|:-:|:-:|
+| 0 | 07.06.2020  |
+| 1 | 18.06.2020 |
+| 2 | In progress  |
+
+## Useful commands
 
 + Install create-react-app: `npm i -g create-react-app`
 + Create react app: `npx create-react-app [app-name]`
