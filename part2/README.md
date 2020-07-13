@@ -18,7 +18,7 @@ See [https://restfulapi.net](https://restfulapi.net)
 
 `axios` the axios library allows to create sophisticated REST HTTP requests that function with ES6 promises.
 
-`json-server` is an npm package that allows to quickly setup and operate a restful server on the developer's machine. Because the default port 3000 is already being used by the react app, the 3001 port is used instead. The command `json-server --port 3001 --watch [file]` runs the json-server on port 3001 serving the specified file.
+`json-server` is an npm package that allows to quickly setup and operate a restful server on the developer's machine. Because the default port 3000 is already being used by the react app, the 3001 port is used instead. The command `json-server --port 3001 --watch [file]` runs the json-server on port 3001 serving the specified file. Also, the npm script `"server": "json-server -p 3001 --watch [file]"` is a convenient addition to the `package.json`.
 
 ## Functions
 
