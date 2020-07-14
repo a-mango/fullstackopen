@@ -11,12 +11,10 @@ const App = () => {
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
-      })
-  }, [])
+    axios.get("http://localhost:3001/persons").then((response) => {
+      setPersons(response.data);
+    });
+  }, []);
 
   const nameExists = (name) =>
     persons.some((p) => p.name.toUpperCase() === name.toUpperCase());
@@ -37,13 +35,14 @@ const App = () => {
     }
 
     const newPerson = {
-      id: persons.length + 1,
       name: newName,
       number: newNumber,
     };
 
-    setPersons(persons.concat(newPerson));
-    setNewName("");
+    axios.post("http://localhost:3001/persons", newPerson).then((response) => {
+      setPersons(persons.concat(response.data));
+      setNewName("");
+    });
   };
 
   const handleNameChange = (event) => {
