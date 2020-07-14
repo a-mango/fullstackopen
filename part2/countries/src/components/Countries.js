@@ -1,7 +1,7 @@
 import React from "react";
 import Country from "./Country";
 
-const Countries = ({ countries }) => {
+const Countries = ({ countries, handleSelectCountry }) => {
   let matches;
 
   if (countries.length === 0) matches = <p>No match found</p>;
@@ -12,7 +12,12 @@ const Countries = ({ countries }) => {
     matches = (
       <ul>
         {countries.map((country) => (
-          <li key={country.alpha2Code}>{country.name}</li>
+          <li key={country.name}>
+            {country.name}
+            <button onClick={() => handleSelectCountry(country.name)}>
+              Show
+            </button>
+          </li>
         ))}
       </ul>
     );

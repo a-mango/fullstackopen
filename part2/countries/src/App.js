@@ -25,6 +25,10 @@ const App = () => {
     setFilter(event.target.value);
   };
 
+  const handleSelectCountry = (country) => {
+    setFilter(country)
+  }
+
   return (
     <div>
       <h1>Countries</h1>
@@ -33,7 +37,7 @@ const App = () => {
         setFilter={setFilter}
         handleFilterChange={handleFilterChange}
       />
-      <Countries countries={countriesToShow} />
+      <Countries countries={countriesToShow} handleSelectCountry={handleSelectCountry}/>
     </div>
   );
 };
