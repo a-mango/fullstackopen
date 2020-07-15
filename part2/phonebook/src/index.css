@@ -1,0 +1,10 @@
+.notification {
+  display: inline;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  color: white;
+  border: 1px solid;
+  border-style: solid;
+  border-radius: 0px;
+  box-shadow: black;
+  padding: 10px;
+}

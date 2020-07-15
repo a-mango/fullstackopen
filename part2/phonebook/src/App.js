@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
+import Notification from "./components/Notification";
 import Filter from "./components/Filter";
 import Persons from "./components/Persons";
 import PersonForm from "./components/PersonForm";
 import personService from "./services/persons";
+import "./index.css";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
+  const [alerts, setAlerts] = useState([]);
 
   useEffect(() => {
     personService.getAll().then((initialPersons) => {
@@ -27,6 +30,14 @@ const App = () => {
         );
 
   const confirm = (message) => window.confirm(message);
+
+  const notify = (color, message) => {
+    const newAlert = { color, message };
+    setAlerts([...alerts, newAlert]);
+    setTimeout(() => {
+      setAlerts(alerts.filter((a) => a !== newAlert));
+    }, 5000);
+  };
 
   const resetForm = () => {
     setNewName("");
@@ -48,6 +59,7 @@ const App = () => {
     } else {
       personService.create(newPerson).then((returnedPerson) => {
         setPersons(persons.concat(returnedPerson));
+        notify(`green`, `${returnedPerson.name} was added to the phonebook`);
       });
     }
     resetForm();
@@ -72,10 +84,14 @@ const App = () => {
               p.id !== returnedPerson.id ? p : returnedPerson
             )
           );
+          notify(`green`, `The number for ${person.name} was updated`);
         })
         .catch(() => {
-          window.alert(`The person ${person.name} was deleted from the server`);
           setPersons(persons.filter((p) => p.id !== person.id));
+          notify(
+            `red`,
+            `The person ${person.name} was not found on the server`
+          );
         });
     }
   };
@@ -88,10 +104,17 @@ const App = () => {
       // Confirm the deletion
       if (confirm(`Delete ${person.name} from the phonebook?`)) {
         personService.remove(person.id).catch(() => {
-          window.alert(`Resource wasn't found on the server`);
+          notify(
+            `orange`,
+            `The person ${person.name} does not exist on the server`
+          );
         });
         // Remove the person from the application's state
         setPersons((persons) => persons.filter((p) => p.id !== person.id));
+        notify(
+          `green`,
+          `The person ${person.name} was deleted from the phonebook`
+        );
       }
     }
   };
@@ -107,6 +130,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification notifications={alerts} />
       <Filter filter={filter} setFilter={setFilter} />
       <PersonForm
         addPerson={addPerson}
