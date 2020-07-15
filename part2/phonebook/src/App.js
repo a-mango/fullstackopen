@@ -12,6 +12,7 @@ const App = () => {
 
   useEffect(() => {
     personService.getAll().then((initialPersons) => {
+      console.log(initialPersons);
       setPersons(initialPersons);
     });
   }, []);
@@ -45,6 +46,34 @@ const App = () => {
     });
   };
 
+  const handlePersonDelete = (id) => {
+    // Filter the person by id
+    const person = persons.filter((p) => p.id === id)[0];
+    // Check if the person was found or display an error
+    if (person === undefined) {
+      window.alert(`Person with id ${id} was not found`);
+    } else {
+      // Confirm the deletion
+      const isDeletionConfirmed = window.confirm(
+        `Delete ${person.name} from the phonebook ?`
+      );
+      if (isDeletionConfirmed) {
+        // Send rest call to delete person and handle error
+        console.log("Deleting person", person);
+        personService
+          .remove(id)
+          .then(request => {
+            console.log(request);
+          })
+          .catch(() => {
+            window.alert(`Resource wasn't found on the server`);
+          });
+        // Remove the person from the application's state
+        setPersons((persons) => persons.filter((p) => p.id !== id));
+      }
+    }
+  };
+
   const handleNameChange = (event) => {
     setNewName(event.target.value);
   };
@@ -72,7 +101,11 @@ const App = () => {
         newNumber={newNumber}
         handleNumberChange={handleNumberChange}
       />
-      <Persons persons={personsToShow} />
+      <Persons
+        persons={personsToShow}
+        setPersons={setPersons}
+        handlePersonDelete={handlePersonDelete}
+      />
     </div>
   );
 };
