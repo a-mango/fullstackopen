@@ -5,7 +5,7 @@ const app = express();
 app.use(express.json());
 
 // Dummy data used by the server
-const data = [
+const persons = [
   {
     name: "Arto Hellas",
     number: "040-123456",
@@ -29,9 +29,25 @@ const data = [
 ];
 
 /**
+ * Home route
+ */
+app.get("/", (req, res) => {
+  const html = `
+  <p>Phonebook has information for ${persons.length} people</p>
+  <p>${new Date()}</p>`
+
+  res.send(html);
+});
+
+/**
  * API read route
  * Returns all the persons in JSON format
  */
 app.get("/api/persons", (req, res) => {
   res.json(notes);
+});
+
+const PORT = 3001;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
