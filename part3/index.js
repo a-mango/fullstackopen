@@ -67,13 +67,52 @@ app.get("/api/persons/:id", (req, res) => {
  */
 app.delete("/api/persons/:id", (req, res) => {
   const id = Number(req.params.id);
-  persons = persons.filter(person => person.id !== id)
+  persons = persons.filter((person) => person.id !== id);
 
   // Send 204 no content response
-  res.status(204).end()
-})
+  res.status(204).end();
+});
 
+app.post("/api/persons", (req, res) => {
+  const body = req.body;
+
+  // Check request content
+  if (!body.name && body.number) {
+    return res.status(400).json({
+      error: "content missing",
+    });
+  }
+
+  // Create a new person object
+  const person = {
+    name: body.name,
+    number: body.number,
+    date: new Date(),
+    id: generateId(),
+  };
+
+  // Add new person to persons
+  persons = persons.concat(person);
+
+  // Respond with newly created person
+  res.json(person);
+});
+
+/**
+ * Generate an ID using Math.random,
+ * Math.round and the exponential operator
+ * Warning: is not collision-free
+ */
+const generateId = () => {
+  return Math.round(Math.random() * 10 ** 10);
+};
+
+// Port to listen on
 const PORT = 3001;
+
+/**
+ * Start the server on the specified port
+ */
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
