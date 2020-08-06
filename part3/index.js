@@ -5,7 +5,7 @@ const app = express();
 app.use(express.json());
 
 // Dummy data used by the server
-const persons = [
+let persons = [
   {
     name: "Arto Hellas",
     number: "040-123456",
@@ -60,6 +60,18 @@ app.get("/api/persons/:id", (req, res) => {
     res.status(404).end();
   }
 });
+
+/**
+ * API delete route
+ * Deletes the persons with the specified id
+ */
+app.delete("/api/persons/:id", (req, res) => {
+  const id = Number(req.params.id);
+  persons = persons.filter(person => person.id !== id)
+
+  // Send 204 no content response
+  res.status(204).end()
+})
 
 const PORT = 3001;
 app.listen(PORT, () => {
