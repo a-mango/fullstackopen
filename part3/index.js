@@ -34,7 +34,7 @@ const persons = [
 app.get("/", (req, res) => {
   const html = `
   <p>Phonebook has information for ${persons.length} people</p>
-  <p>${new Date()}</p>`
+  <p>${new Date()}</p>`;
 
   res.send(html);
 });
@@ -44,7 +44,21 @@ app.get("/", (req, res) => {
  * Returns all the persons in JSON format
  */
 app.get("/api/persons", (req, res) => {
-  res.json(notes);
+  res.json(persons);
+});
+
+/**
+ * API read route
+ * Returns the person with the specified id
+ */
+app.get("/api/persons/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const person = persons.find((p) => p.id === id);
+  if (person) {
+    res.json(person);
+  } else {
+    res.status(404).end();
+  }
 });
 
 const PORT = 3001;
