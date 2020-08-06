@@ -76,10 +76,14 @@ app.delete("/api/persons/:id", (req, res) => {
 app.post("/api/persons", (req, res) => {
   const body = req.body;
 
-  // Check request content
-  if (!body.name && body.number) {
+  // If request body is not valid, return 400 error
+  if (!body.name || !body.number) {
     return res.status(400).json({
       error: "content missing",
+    });
+  } else if (nameExists(body.name)) {
+    return res.status(400).json({
+      error: "name must be unique",
     });
   }
 
@@ -97,6 +101,14 @@ app.post("/api/persons", (req, res) => {
   // Respond with newly created person
   res.json(person);
 });
+
+/**
+ * Finds if a person with an equal name value
+ * already exists in the list
+ *
+ * @param {string} name The value to check for
+ */
+const nameExists = (name) => persons.some((person) => person.name === name);
 
 /**
  * Generate an ID using Math.random,
