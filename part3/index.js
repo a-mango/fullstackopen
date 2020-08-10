@@ -1,8 +1,12 @@
 const express = require("express");
+var morgan = require('morgan');
 
 // Create a new app object
 const app = express();
+
+// Load middlewares
 app.use(express.json());
+app.use(morgan('tiny'))
 
 // Dummy data used by the server
 let persons = [
