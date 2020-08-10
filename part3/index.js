@@ -1,12 +1,17 @@
 const express = require("express");
-var morgan = require('morgan');
+var morgan = require("morgan");
+
+// Setup morgan tokens
+morgan.token("body", (req, res) => JSON.stringify(req.body));
 
 // Create a new app object
 const app = express();
 
 // Load middlewares
 app.use(express.json());
-app.use(morgan('tiny'))
+app.use(
+  morgan(":method :url :status :res[content-length] - :response-time ms :body")
+);
 
 // Dummy data used by the server
 let persons = [
