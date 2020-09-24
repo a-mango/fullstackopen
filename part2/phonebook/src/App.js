@@ -64,8 +64,7 @@ const App = () => {
           notify(`green`, `${createdPerson.name} was added to the phonebook`);
         })
         .catch((error) => {
-          console.log(error.response.data);
-          notify(`red`, error.response.data);
+          notify(`red`, error.response.data.error);
         });
     }
     resetForm();
