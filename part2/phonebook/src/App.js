@@ -57,10 +57,16 @@ const App = () => {
     if (nameExists(newName)) {
       updatePerson(newPerson);
     } else {
-      personService.create(newPerson).then((returnedPerson) => {
-        setPersons(persons.concat(returnedPerson));
-        notify(`green`, `${returnedPerson.name} was added to the phonebook`);
-      });
+      personService
+        .create(newPerson)
+        .then((createdPerson) => {
+          setPersons(persons.concat(createdPerson));
+          notify(`green`, `${createdPerson.name} was added to the phonebook`);
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+          notify(`red`, error.response.data);
+        });
     }
     resetForm();
   };
