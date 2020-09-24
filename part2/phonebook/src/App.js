@@ -91,12 +91,16 @@ const App = () => {
           );
           notify(`green`, `The number for ${person.name} was updated`);
         })
-        .catch(() => {
-          setPersons(persons.filter((p) => p.id !== person.id));
-          notify(
-            `red`,
-            `The person ${person.name} was not found on the server`
-          );
+        .catch((error) => {
+          if(error.response.data.error) {
+            notify(`red`, error.response.data.error);
+          } else {
+            setPersons(persons.filter((p) => p.id !== person.id));
+            notify(
+              `red`,
+              `The person ${person.name} was not found on the server`
+              );
+            }
         });
     }
   };
