@@ -102,7 +102,7 @@ describe('favorite blog', () => {
     expect(result).toEqual(expected)
   })
 
-  test('when list has only one blog equals only item', () => {
+  test('when list has only one blog equals first item', () => {
     const result = listHelper.favoriteBlog(listWithOneBlog)
     const expected = listWithOneBlog[0]
 
@@ -125,7 +125,7 @@ describe('most blogs', () => {
     expect(result).toEqual(expected)
   })
 
-  test('when list has only one blog equals only author', () => {
+  test('when list has only one blog equals first item', () => {
     const result = listHelper.mostBlogs(listWithOneBlog)
 
     const expected = {
@@ -141,6 +141,37 @@ describe('most blogs', () => {
     const expected = {
       author: 'Robert C. Martin',
       blogs: 3,
+    }
+
+    expect(result).toEqual(expected)
+  })
+})
+
+describe('most likes', () => {
+  test('of empty list is null', () => {
+    const result = listHelper.mostLikes(listWithZeroBlog)
+    const expected = null
+
+    expect(result).toEqual(expected)
+  })
+
+  // eslint-disable-next-line quotes
+  test('when list has only one blog equals first item', () => {
+    const result = listHelper.mostLikes(listWithOneBlog)
+
+    const expected = {
+      author: listWithOneBlog[0].author,
+      likes: listWithOneBlog[0].likes,
+    }
+
+    expect(result).toEqual(expected)
+  })
+
+  test('when list has multiple blogs right item is found', () => {
+    const result = listHelper.mostLikes(listWithMultipleBlogs)
+    const expected = {
+      author: 'Edsger W. Dijkstra',
+      likes: 17,
     }
 
     expect(result).toEqual(expected)
