@@ -1,3 +1,5 @@
+var _ = require('lodash')
+
 // eslint-disable-next-line no-unused-vars
 const dummy = (blogs) => {
   return 1
@@ -20,8 +22,25 @@ const favoriteBlog = (blogs) => {
   return blogWithMostLikes
 }
 
+const mostBlogs = (blogs) => {
+  if (blogs.length === 0) return null
+
+  // Pass the blogs array to the lodash constructor
+  const blogsByAuthor = _(blogs)
+    .groupBy('author') // Group collections item by author key
+    .map((posts, author) => ({ author, blogs: posts.length }))
+    .value()
+
+  // Find the author with the maximum number of blogs
+  // in the blogsByAuthor collection
+  const authorWithMostBlogs = _.maxBy(blogsByAuthor, 'blogs')
+
+  return authorWithMostBlogs
+}
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
+  mostBlogs,
 }
