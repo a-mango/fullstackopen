@@ -100,7 +100,11 @@ test('a blog with missing title or author property returns a 400 Bad Request cod
     likes: 1,
   }
 
-  await api.post('/api/blogs').send(newBlog).expect(400)
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
 })
 
 /**
