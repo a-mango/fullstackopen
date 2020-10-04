@@ -21,12 +21,16 @@ beforeEach(async () => {
 })
 
 /**
- * Test if all the items saved to the database are returned
+ * Test if the correct amount of items saved in the database is
+ * returned in JSON format
  */
-test('all blogs are returned', async () => {
-  const response = await api.get('/api/blogs')
+test('correct amount of blogs is returned in JSON format', async () => {
+  const response = await api
+    .get('/api/blogs')
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
 
-  expect(response).toHaveLength(helper.initialBlogs.length)
+  expect(response.body).toHaveLength(helper.initialBlogs.length)
 })
 
 /**
