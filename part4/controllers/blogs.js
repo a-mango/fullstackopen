@@ -11,7 +11,7 @@ blogsRouter.post('/', (request, response) => {
   const blog = new Blog(request.body)
 
   if (!request.body.title || !request.body.author) {
-    return response.status(400).end()
+    return response.status(400).json({ error: 'missing title or url' })
   }
 
   blog.save().then(result => {
