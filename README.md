@@ -61,7 +61,7 @@ Runs the `build:ui` script, commits the changes to git then runs the `deploy` sc
 
 Run Heroku's production logs in the terminal.
 
-**Warning:** assumes that heroku-cli is installed and configured correctly.
+**Warning:** assumes that *heroku-cli* is installed and configured correctly.
 
 ### `"lint": "eslint ."`
 
@@ -70,3 +70,9 @@ Runs eslint in dry mode.
 ### `"lint:fix": "eslint . --fix"`
 
 Runs eslint and fixes errors.
+
+### `"format:js": "prettier --write '**/*.js'"`
+
+Formats all javascript files in the project using *prettier*.
+
+**Warning:** will also format `build` directory unless specified otherwise in `.prettierignore` file.
