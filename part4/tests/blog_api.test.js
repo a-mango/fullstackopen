@@ -24,7 +24,7 @@ beforeEach(async () => {
  * Test if the correct amount of blogs saved in the database is
  * returned in JSON format
  */
-test('the correct amount of blogs is returned in JSON format', async () => {
+test('the correct amount of blogs is returned in the right format', async () => {
   const response = await api
     .get('/api/blogs')
     .expect(200)
@@ -36,11 +36,36 @@ test('the correct amount of blogs is returned in JSON format', async () => {
 /**
  * Test if the unique identifier of a blog is named id
  */
-test('the unique identifier of a blog is named id', async () => {
+test('the id field is defined', async () => {
   const blogs = await helper.blogsInDb()
   const blog = blogs[0]
 
   expect(blog.id).toBeDefined()
+})
+
+/**
+ * Test if a blog can be added
+ */
+test('a blog can be added', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+
+  const newBlog = {
+    title: 'How to Write a Git Commit Message',
+    author: 'Chris Beam',
+    url: 'https://chris.beams.io/posts/git-commit/',
+    likes: 1,
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await helper.blogsInDb()
+
+  expect(blogsAtEnd).toHaveLength(blogsAtStart.length + 1)
+  expect(blogsAtEnd).toContainEqual(expect.objectContaining(newBlog))
 })
 
 /**
