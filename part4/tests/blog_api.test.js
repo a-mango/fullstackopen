@@ -69,6 +69,41 @@ test('a blog can be added', async () => {
 })
 
 /**
+ * Test if a blog with missing likes property defaults to 0
+ */
+test('a blog with missing likes property defaults to 0', async () => {
+  const newBlog = {
+    title: 'How to Write a Git Commit Message',
+    author: 'Chris Beam',
+    url: 'https://chris.beams.io/posts/git-commit/',
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  const lastBlog = blogsAtEnd[blogsAtEnd.length - 1]
+
+  expect(lastBlog.likes).toBe(0)
+})
+
+/**
+ * Test if a blog post request with missing title or author
+ * returnds a 400 response
+ */
+test('a blog with missing title or author property returns a 400 Bad Request code', async () => {
+  const newBlog = {
+    url: 'https://chris.beams.io/posts/git-commit/',
+    likes: 1,
+  }
+
+  await api.post('/api/blogs').send(newBlog).expect(400)
+})
+
+/**
  * Operations to run after each test session
  */
 afterAll(() => {
