@@ -21,16 +21,26 @@ beforeEach(async () => {
 })
 
 /**
- * Test if the correct amount of items saved in the database is
+ * Test if the correct amount of blogs saved in the database is
  * returned in JSON format
  */
-test('correct amount of blogs is returned in JSON format', async () => {
+test('the correct amount of blogs is returned in JSON format', async () => {
   const response = await api
     .get('/api/blogs')
     .expect(200)
     .expect('Content-Type', /application\/json/)
 
   expect(response.body).toHaveLength(helper.initialBlogs.length)
+})
+
+/**
+ * Test if the unique identifier of a blog is named id
+ */
+test('the unique identifier of a blog is named id', async () => {
+  const blogs = await helper.blogsInDb()
+  const blog = blogs[0]
+
+  expect(blog.id).toBeDefined()
 })
 
 /**
