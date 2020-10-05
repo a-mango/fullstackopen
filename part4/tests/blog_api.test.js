@@ -21,90 +21,140 @@ beforeEach(async () => {
 })
 
 /**
- * Test if the correct amount of blogs saved in the database is
- * returned in JSON format
+ * Tests for the api GET route
  */
-test('the correct amount of blogs is returned in the right format', async () => {
-  const response = await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
+describe('when there is initially some blogs saved', () => {
+  test('blogs are returned as json', async () => {
+    await api
+      .get(helper.apiUrl)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
 
-  expect(response.body).toHaveLength(helper.initialBlogs.length)
+  test('all blogs are returned', async () => {
+    const response = await api.get(helper.apiUrl)
+
+    expect(response.body).toHaveLength(helper.initialBlogs.length)
+  })
+
+  test('the id property is defined', async () => {
+    const response = await api.get(helper.apiUrl)
+
+    expect(response.body[0].id).toBeDefined()
+  })
+
+  test('a specific blog is within the returned blogs', async () => {
+    const response = await api.get(helper.apiUrl)
+
+    expect(response.body).toContainEqual(
+      expect.objectContaining({
+        title: 'React patterns',
+        author: 'Michael Chan',
+        url: 'https://reactpatterns.com/',
+        likes: 7,
+      })
+    )
+  })
 })
 
 /**
- * Test if the unique identifier of a blog is named id
+ * Tests for the api GET route with id
  */
-test('the id field is defined', async () => {
-  const blogs = await helper.blogsInDb()
-  const blog = blogs[0]
+// describe('viewing a specific blog', () => {
+//   test('suceeds with a valid id', async () => {
+//     const blogsAtStart = await helper.blogsInDb()
+//     const blogToView = blogsAtStart[0]
 
-  expect(blog.id).toBeDefined()
+//     const resultBlog = await api
+//       .get(`${helper.apiUrl}/${blogToView.id}`)
+//       .expect(200)
+//       .expect('Content-Type', /application\/json/)
+
+//     const processedBlogToView = JSON.parse(JSON.stringify(blogToView))
+
+//     expect(resultBlog.body).toEqual(processedBlogToView)
+//   })
+
+//   test('fails with status code 404 if blog does not exist', async () => {
+//     const validNonexistingId = await helper.nonExistingId()
+
+//     await api.get(`${helper.apiUrl}/${validNonexistingId}`).expect(404)
+//   })
+
+//   test('fails with status code 400 if id is invalid', async () => {
+//     const invalidId = '29a32498ff102939e25'
+
+//     await api.get(`${helper.apiUrl}/${invalidId}`).expect(400)
+//   })
+// })
+
+/**
+ * Tests for the api POST route
+ */
+describe('addition of a new blog', () => {
+  test('suceeds with valid data', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const newBlog = helper.newBlog
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length + 1)
+    expect(blogsAtEnd).toContainEqual(expect.objectContaining(newBlog))
+  })
+
+  test('uses default values when optional data is missing', async () => {
+    const blog = helper.blogWithMissingOptionalData
+
+    await api
+      .post(helper.apiUrl)
+      .send(blog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    const lastBlog = blogsAtEnd[blogsAtEnd.length - 1]
+
+    expect(lastBlog.likes).toBe(0)
+  })
+
+  test('fails with status code 400 if data is invaild', async () => {
+    await api.post(helper.apiUrl).send(helper.blogWithInvalidData).expect(400)
+  })
 })
 
 /**
- * Test if a blog can be added
+ * Tests for the api DELETE route
  */
-test('a blog can be added', async () => {
-  const blogsAtStart = await helper.blogsInDb()
+describe('deletion of a blog', () => {
+  test('suceeds with status code 204 if id is valid', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
 
-  const newBlog = {
-    title: 'How to Write a Git Commit Message',
-    author: 'Chris Beam',
-    url: 'https://chris.beams.io/posts/git-commit/',
-    likes: 1,
-  }
+    await api.delete(`${helper.apiUrl}/${blogToDelete.id}`).expect(204)
 
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(201)
-    .expect('Content-Type', /application\/json/)
+    const blogsAtEnd = await helper.blogsInDb()
 
-  const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialNotes.length - 1)
+    expect(blogsAtEnd).not.toContainEqual(expect.objectContaining(blogToDelete))
+  })
 
-  expect(blogsAtEnd).toHaveLength(blogsAtStart.length + 1)
-  expect(blogsAtEnd).toContainEqual(expect.objectContaining(newBlog))
-})
+  test('fails with status code 404 if resource does not exist', async () => {
+    const validNonexistingId = await helper.nonExistingId()
 
-/**
- * Test if a blog with missing likes property defaults to 0
- */
-test('a blog with missing likes property defaults to 0', async () => {
-  const newBlog = {
-    title: 'How to Write a Git Commit Message',
-    author: 'Chris Beam',
-    url: 'https://chris.beams.io/posts/git-commit/',
-  }
+    await api.delete(`${helper.apiUrl}/${validNonexistingId}`).expect(404)
+  })
 
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(201)
-    .expect('Content-Type', /application\/json/)
+  test('fails with status code 400 if id is invalid', async () => {
+    const invalidId = '5a3d5da59070081a82a3445'
 
-  const blogsAtEnd = await helper.blogsInDb()
-  const lastBlog = blogsAtEnd[blogsAtEnd.length - 1]
-
-  expect(lastBlog.likes).toBe(0)
-})
-
-/**
- * Test if a blog post request with missing title or author
- * returnds a 400 response
- */
-test('a blog with missing title or author property returns a 400 Bad Request code', async () => {
-  const newBlog = {
-    url: 'https://chris.beams.io/posts/git-commit/',
-    likes: 1,
-  }
-
-  await api
-    .post('/api/blogs')
-    .send(newBlog)
-    .expect(400)
-    .expect('Content-Type', /application\/json/)
+    await api.delete(`/api/notes/${invalidId}`).expect(400)
+  })
 })
 
 /**

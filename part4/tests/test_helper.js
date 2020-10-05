@@ -1,5 +1,6 @@
 const Blog = require('../models/blog')
 
+const apiUrl = '/api/blogs'
 /**
  * Initial blogs used for testing
  */
@@ -58,14 +59,54 @@ const initialBlogs = [
 ]
 
 /**
+ * New blog used for testing
+ */
+const newBlog = {
+  title: 'How to Write a Git Commit Message',
+  author: 'Chris Beam',
+  url: 'https://chris.beams.io/posts/git-commit/',
+  likes: 1,
+}
+
+const blogWithMissingOptionalData = {
+  title: 'Jest array object match contains',
+  author: 'Hugo',
+  url: 'https://codewithhugo.com/jest-array-object-match-contain/',
+}
+
+const blogWithInvalidData = {
+  url: 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Status',
+  likes: 4,
+}
+
+/**
  * Fetches all blogs in the database
  */
 const blogsInDb = async () => {
   const blogs = await Blog.find({})
-  return blogs.map((blog) => blog.toJSON())
+  return blogs.map(blog => blog.toJSON())
+}
+
+const nonExistingId = async () => {
+  const blog = new Blog({
+    title: 'will be removed',
+    author: 'unknown',
+    url: 'to/nowhere',
+    likes: 0,
+  })
+
+  await blog.save()
+  await blog.remove()
+
+  return blog.id.toString()
 }
 
 module.exports = {
+  apiUrl,
   initialBlogs,
+  newBlog,
+  blogWithMissingOptionalData,
+  blogWithInvalidData,
   blogsInDb,
+  nonExistingId,
 }
