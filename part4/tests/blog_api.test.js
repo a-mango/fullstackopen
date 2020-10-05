@@ -92,7 +92,7 @@ describe('when there is initially some blogs saved', () => {
  * Tests for the api POST route
  */
 describe('addition of a new blog', () => {
-  test('suceeds with valid data', async () => {
+  test('succeeds with stauts code 201 when data is valid', async () => {
     const blogsAtStart = await helper.blogsInDb()
     const newBlog = helper.newBlog
 
@@ -132,7 +132,7 @@ describe('addition of a new blog', () => {
  * Tests for the api DELETE route
  */
 describe('deletion of a blog', () => {
-  test('suceeds with status code 204 if id is valid', async () => {
+  test('succeeds with status code 204 when id is valid', async () => {
     const blogsAtStart = await helper.blogsInDb()
     const blogToDelete = blogsAtStart[0]
 
@@ -144,10 +144,38 @@ describe('deletion of a blog', () => {
     expect(blogsAtEnd).not.toContainEqual(expect.objectContaining(blogToDelete))
   })
 
-  test('fails with status code 404 if resource does not exist', async () => {
+  test('fails with status code 404 when resource does not exist', async () => {
     const validNonexistingId = await helper.nonExistingId()
 
     await api.delete(`${helper.apiUrl}/${validNonexistingId}`).expect(404)
+  })
+})
+
+describe('updation of a blog', () => {
+  test('succeeds with status code 200 when data is valid', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+
+    blogToUpdate.author = 'Linus Thorvals'
+    blogToUpdate.title = 'Building a free operating system'
+    blogToUpdate.likes = 192
+
+    await api.put(`${helper.apiUrl}/${blogToUpdate.id}`)
+      .send(blogToUpdate)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  test('fails with status code 400 when data is invalid', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+
+    blogToUpdate.author = null
+    blogToUpdate.title = null
+
+    await api.put(`${helper.apiUrl}/${blogToUpdate.id}`)
+      .send(blogToUpdate)
+      .expect(400)
   })
 })
 
