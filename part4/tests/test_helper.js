@@ -75,7 +75,7 @@ const blogWithMissingOptionalData = {
 }
 
 const blogWithInvalidData = {
-  url: 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Status',
+  author: 'Hugo',
   likes: 4,
 }
 
