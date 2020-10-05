@@ -151,16 +151,22 @@ describe('deletion of a blog', () => {
   })
 })
 
+/**
+ * Tests for the blog api PUT route
+ */
 describe('updation of a blog', () => {
   test('succeeds with status code 200 when data is valid', async () => {
     const blogsAtStart = await helper.blogsInDb()
     const blogToUpdate = blogsAtStart[0]
 
-    blogToUpdate.author = 'Linus Thorvals'
-    blogToUpdate.title = 'Building a free operating system'
+    blogToUpdate.author = 'Linus Thorvalds'
+    blogToUpdate.title = 'Pearls before swine...'
+    blogToUpdate.url =
+      'http://torvalds-family.blogspot.com/2011/02/pearls-before-swine.html'
     blogToUpdate.likes = 192
 
-    await api.put(`${helper.apiUrl}/${blogToUpdate.id}`)
+    await api
+      .put(`${helper.apiUrl}/${blogToUpdate.id}`)
       .send(blogToUpdate)
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -170,10 +176,11 @@ describe('updation of a blog', () => {
     const blogsAtStart = await helper.blogsInDb()
     const blogToUpdate = blogsAtStart[0]
 
-    blogToUpdate.author = null
     blogToUpdate.title = null
+    blogToUpdate.url = null
 
-    await api.put(`${helper.apiUrl}/${blogToUpdate.id}`)
+    await api
+      .put(`${helper.apiUrl}/${blogToUpdate.id}`)
       .send(blogToUpdate)
       .expect(400)
   })
