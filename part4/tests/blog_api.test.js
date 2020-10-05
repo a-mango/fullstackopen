@@ -140,7 +140,7 @@ describe('deletion of a blog', () => {
 
     const blogsAtEnd = await helper.blogsInDb()
 
-    expect(blogsAtEnd).toHaveLength(helper.initialNotes.length - 1)
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)
     expect(blogsAtEnd).not.toContainEqual(expect.objectContaining(blogToDelete))
   })
 
@@ -148,12 +148,6 @@ describe('deletion of a blog', () => {
     const validNonexistingId = await helper.nonExistingId()
 
     await api.delete(`${helper.apiUrl}/${validNonexistingId}`).expect(404)
-  })
-
-  test('fails with status code 400 if id is invalid', async () => {
-    const invalidId = '5a3d5da59070081a82a3445'
-
-    await api.delete(`/api/notes/${invalidId}`).expect(400)
   })
 })
 
