@@ -96,6 +96,8 @@ describe('addition of an user', () => {
   })
 
   test('fails with status code 400 and returns appropriate error when data is missing', async () => {
+    const usersAtStart = await helper.usersInDb()
+
     const invalidUser = {
       username: '',
       password: '',
@@ -107,10 +109,15 @@ describe('addition of an user', () => {
       .expect(400)
       .expect('Content-Type', /application\/json/)
 
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
+
     expect(result.body.error).toBe('missing username or password')
   })
 
   test('fails with status code 400 and returns appropriate error when data is invalid', async () => {
+    const usersAtStart = await helper.usersInDb()
+
     const invalidUser = {
       username: 'am',
       password: '12',
@@ -121,6 +128,9 @@ describe('addition of an user', () => {
       .send(invalidUser)
       .expect(400)
       .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(usersAtStart.length)
 
     expect(result.body.error).toBe(
       'username and password must be at least 3 characters long'
