@@ -26,25 +26,25 @@ beforeEach(async () => {
 describe('when there is initially some blogs saved', () => {
   test('blogs are returned as json', async () => {
     await api
-      .get(helper.apiUrl)
+      .get(helper.blogApi)
       .expect(200)
       .expect('Content-Type', /application\/json/)
   })
 
   test('all blogs are returned', async () => {
-    const response = await api.get(helper.apiUrl)
+    const response = await api.get(helper.blogApi)
 
     expect(response.body).toHaveLength(helper.initialBlogs.length)
   })
 
   test('the id property is defined', async () => {
-    const response = await api.get(helper.apiUrl)
+    const response = await api.get(helper.blogApi)
 
     expect(response.body[0].id).toBeDefined()
   })
 
   test('a specific blog is within the returned blogs', async () => {
-    const response = await api.get(helper.apiUrl)
+    const response = await api.get(helper.blogApi)
 
     expect(response.body).toContainEqual(
       expect.objectContaining({
@@ -60,33 +60,33 @@ describe('when there is initially some blogs saved', () => {
 /**
  * Tests for the api GET route with id
  */
-// describe('viewing a specific blog', () => {
-//   test('suceeds with a valid id', async () => {
-//     const blogsAtStart = await helper.blogsInDb()
-//     const blogToView = blogsAtStart[0]
+describe('viewing a specific blog', () => {
+  test('suceeds with a valid id', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToView = blogsAtStart[0]
 
-//     const resultBlog = await api
-//       .get(`${helper.apiUrl}/${blogToView.id}`)
-//       .expect(200)
-//       .expect('Content-Type', /application\/json/)
+    const resultBlog = await api
+      .get(`${helper.blogApi}/${blogToView.id}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
 
-//     const processedBlogToView = JSON.parse(JSON.stringify(blogToView))
+    const processedBlogToView = JSON.parse(JSON.stringify(blogToView))
 
-//     expect(resultBlog.body).toEqual(processedBlogToView)
-//   })
+    expect(resultBlog.body).toEqual(processedBlogToView)
+  })
 
-//   test('fails with status code 404 if blog does not exist', async () => {
-//     const validNonexistingId = await helper.nonExistingId()
+  test('fails with status code 404 if blog does not exist', async () => {
+    const validNonexistingId = await helper.nonExistingId()
 
-//     await api.get(`${helper.apiUrl}/${validNonexistingId}`).expect(404)
-//   })
+    await api.get(`${helper.blogApi}/${validNonexistingId}`).expect(404)
+  })
 
-//   test('fails with status code 400 if id is invalid', async () => {
-//     const invalidId = '29a32498ff102939e25'
+  test('fails with status code 400 if id is invalid', async () => {
+    const invalidId = '29a32498ff102939e25'
 
-//     await api.get(`${helper.apiUrl}/${invalidId}`).expect(400)
-//   })
-// })
+    await api.get(`${helper.blogApi}/${invalidId}`).expect(400)
+  })
+})
 
 /**
  * Tests for the api POST route
@@ -112,7 +112,7 @@ describe('addition of a new blog', () => {
     const blog = helper.blogWithMissingOptionalData
 
     await api
-      .post(helper.apiUrl)
+      .post(helper.blogApi)
       .send(blog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -124,7 +124,7 @@ describe('addition of a new blog', () => {
   })
 
   test('fails with status code 400 if data is invaild', async () => {
-    await api.post(helper.apiUrl).send(helper.blogWithInvalidData).expect(400)
+    await api.post(helper.blogApi).send(helper.blogWithInvalidData).expect(400)
   })
 })
 
@@ -136,7 +136,7 @@ describe('deletion of a blog', () => {
     const blogsAtStart = await helper.blogsInDb()
     const blogToDelete = blogsAtStart[0]
 
-    await api.delete(`${helper.apiUrl}/${blogToDelete.id}`).expect(204)
+    await api.delete(`${helper.blogApi}/${blogToDelete.id}`).expect(204)
 
     const blogsAtEnd = await helper.blogsInDb()
 
@@ -147,7 +147,7 @@ describe('deletion of a blog', () => {
   test('fails with status code 404 when resource does not exist', async () => {
     const validNonexistingId = await helper.nonExistingId()
 
-    await api.delete(`${helper.apiUrl}/${validNonexistingId}`).expect(404)
+    await api.delete(`${helper.blogApi}/${validNonexistingId}`).expect(404)
   })
 })
 
@@ -166,7 +166,7 @@ describe('updation of a blog', () => {
     blogToUpdate.likes = 192
 
     await api
-      .put(`${helper.apiUrl}/${blogToUpdate.id}`)
+      .put(`${helper.blogApi}/${blogToUpdate.id}`)
       .send(blogToUpdate)
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -180,7 +180,7 @@ describe('updation of a blog', () => {
     blogToUpdate.url = null
 
     await api
-      .put(`${helper.apiUrl}/${blogToUpdate.id}`)
+      .put(`${helper.blogApi}/${blogToUpdate.id}`)
       .send(blogToUpdate)
       .expect(400)
   })
