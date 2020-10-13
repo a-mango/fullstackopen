@@ -1,6 +1,9 @@
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
-const apiUrl = '/api/blogs'
+const blogApi = '/api/blogs'
+const userApi = '/api/users'
+
 /**
  * Initial blogs used for testing
  */
@@ -80,13 +83,8 @@ const blogWithInvalidData = {
 }
 
 /**
- * Fetches all blogs in the database
+ * Generates a non existing mongoose id
  */
-const blogsInDb = async () => {
-  const blogs = await Blog.find({})
-  return blogs.map(blog => blog.toJSON())
-}
-
 const nonExistingId = async () => {
   const blog = new Blog({
     title: 'will be removed',
@@ -101,12 +99,32 @@ const nonExistingId = async () => {
   return blog.id.toString()
 }
 
+/**
+ * Fetches all blogs in the database
+ */
+const blogsInDb = async () => {
+  const blogs = await Blog.find({})
+  return blogs.map(blog => blog.toJSON())
+}
+
+/**
+ * Fetches all users in the database
+ */
+const usersInDb = async () => {
+  const users = await User.find({})
+  return users.map(u => u.toJSON())
+}
+
+
+
 module.exports = {
-  apiUrl,
+  blogApi,
+  userApi,
   initialBlogs,
   newBlog,
   blogWithMissingOptionalData,
   blogWithInvalidData,
-  blogsInDb,
   nonExistingId,
+  blogsInDb,
+  usersInDb,
 }
