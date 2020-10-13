@@ -82,6 +82,19 @@ const blogWithInvalidData = {
   likes: 4,
 }
 
+const initialUsers = [
+  {
+    username: 'thegray00',
+    name: 'Gandalf',
+    password: 'openup',
+  },
+  {
+    username: 'bigp',
+    name: 'Pippin',
+    password: 'carrot'
+  }
+]
+
 /**
  * Generates a non existing mongoose id
  */
