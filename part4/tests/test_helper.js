@@ -137,6 +137,7 @@ module.exports = {
   newBlog,
   blogWithMissingOptionalData,
   blogWithInvalidData,
+  initialUsers,
   nonExistingId,
   blogsInDb,
   usersInDb,
