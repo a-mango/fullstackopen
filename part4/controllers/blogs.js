@@ -1,24 +1,43 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
+/**
+ * Blog api get route
+ */
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({})
+  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
   response.json(blogs)
 })
 
+/**
+ * Blog api create route
+ */
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
+
+  const user = await User.findOne({})
 
   if (!body.title || !body.url) {
     return response.status(400).json({ error: 'missing title or url' })
   }
 
-  const blog = new Blog(body)
+  const blog = new Blog({
+    user: user.id,
+    ...body,
+  })
 
   const savedBlog = await blog.save()
+
+  user.blogs = user.blogs.concat(savedBlog.id)
+  await user.save()
+
   response.status(201).json(savedBlog)
 })
 
+/**
+ * Blog api delete route
+ */
 blogsRouter.delete('/:id', async (request, response) => {
   const deletedBlog = await Blog.findByIdAndRemove(request.params.id)
 
@@ -29,6 +48,9 @@ blogsRouter.delete('/:id', async (request, response) => {
   }
 })
 
+/**
+ * Blog api put route
+ */
 blogsRouter.put('/:id', async (request, response) => {
   const body = request.body
 
