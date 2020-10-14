@@ -3,6 +3,8 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
+import Notification from './components/Notification'
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
@@ -11,6 +13,7 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  const [notification, setNotification] = useState(null)
 
   /**
    * Fetch all blogs when app is rendered
@@ -29,9 +32,20 @@ const App = () => {
       const user = JSON.parse(loggedUserJson)
       setUser(user)
       blogService.setToken(user.token)
-      console.log(`Authenticated as ${user.username}`)
+      handleNotification("Info", `Automatically authenticated as ${user.username}`)
     }
   }, [])
+
+  /**
+   * Handles the display of a notification message
+   */
+  const handleNotification = (type, message) => {
+    setNotification({
+      type,
+      message,
+    })
+    setTimeout(() => setNotification(null), 6000)
+  }
 
   /**
    * Handle login of the user by making a call to the
@@ -57,9 +71,9 @@ const App = () => {
       setUsername('')
       setPassword('')
 
-      console.log(`Authenticated as ${user.username}`)
+      handleNotification("Success", `Authenticated as ${user.username}`)
     } catch (exception) {
-      console.error('Authentication failed: wrong credentials')
+      handleNotification("Error", `Authentication failed. Verify the username and password and try again`)
     }
   }
 
@@ -73,7 +87,7 @@ const App = () => {
     // Reset state
     setUser(null)
 
-    console.log(`User logged out`)
+    handleNotification("Success", `User logged out`)
   }
 
   /**
@@ -100,10 +114,17 @@ const App = () => {
       setTitle('')
       setAuthor('')
       setUrl('')
+
+      // Notify the user
+      handleNotification('Success', `A new blog was added to the database`)
     } catch (exception) {
-      console.error('Blog creation failed')
+      handleNotification(
+        'Error',
+        'There was a problem while adding a blog to the database'
+      )
     }
   }
+
   /**
    * Login form component
    */
@@ -182,22 +203,25 @@ const App = () => {
     </div>
   )
 
-  // Show the login form if user is not authenticated
-  if (user === null) {
-    return loginForm()
-  }
-
-  // Show all blogs when user is logged in
+  // Show login form if user is not logged in,
+  // otherwise show blog list and controls
   return (
     <div>
       <h1>Blogs</h1>
-      {logoutForm()}
-      {blogForm()}
+      <Notification notification={notification} />
+      {user === null ? (
+        loginForm()
+      ) : (
+        <div>
+          {logoutForm()}
+          {blogForm()}
 
-      <h2>Saved blogs</h2>
-      {blogs.map(blog => (
-        <Blog key={blog.id} blog={blog} />
-      ))}
+          <h2>Saved blogs</h2>
+          {blogs.map(blog => (
+            <Blog key={blog.id} blog={blog} />
+          ))}
+        </div>
+      )}
     </div>
   )
 }
