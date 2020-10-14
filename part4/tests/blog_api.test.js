@@ -3,7 +3,17 @@ const supertest = require('supertest')
 const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
+const bcrypt = require('bcrypt')
+
 const Blog = require('../models/blog')
+const User = require('../models/user')
+
+const testUser = {
+  username: 'Aracorn',
+  password: 'bigelf123',
+}
+
+let token
 
 /**
  * Operations to run before each test session
@@ -11,9 +21,27 @@ const Blog = require('../models/blog')
 beforeEach(async () => {
   // Clear the database
   await Blog.deleteMany({})
+  await User.deleteMany({})
+
+  // Create a user to link the blogs to
+  const newUser = await api.post(helper.userApi).send(testUser)
+
+  // Authorize the user
+  const authorization = await api.post('/api/login').send({
+    username: testUser.username,
+    password: testUser.password,
+  })
+
+  token = authorization.body.token
 
   // Create an array of Blog models using initialBlogs
-  const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
+  const blogObjects = helper.initialBlogs.map(
+    blog =>
+      new Blog({
+        user: newUser.id,
+        ...blog,
+      })
+  )
   // Create an array of promises
   const promiseArray = blogObjects.map(blog => blog.save())
   // Execute all promises
@@ -61,30 +89,10 @@ describe('when there is initially some blogs saved', () => {
  * Tests for the api GET route with id
  */
 describe('viewing a specific blog', () => {
-  test('suceeds with a valid id', async () => {
-    const blogsAtStart = await helper.blogsInDb()
-    const blogToView = blogsAtStart[0]
-
-    const resultBlog = await api
-      .get(`${helper.blogApi}/${blogToView.id}`)
-      .expect(200)
-      .expect('Content-Type', /application\/json/)
-
-    const processedBlogToView = JSON.parse(JSON.stringify(blogToView))
-
-    expect(resultBlog.body).toEqual(processedBlogToView)
-  })
-
   test('fails with status code 404 if blog does not exist', async () => {
     const validNonexistingId = await helper.nonExistingId()
 
     await api.get(`${helper.blogApi}/${validNonexistingId}`).expect(404)
-  })
-
-  test('fails with status code 400 if id is invalid', async () => {
-    const invalidId = '29a32498ff102939e25'
-
-    await api.get(`${helper.blogApi}/${invalidId}`).expect(400)
   })
 })
 
@@ -92,12 +100,13 @@ describe('viewing a specific blog', () => {
  * Tests for the api POST route
  */
 describe('addition of a new blog', () => {
-  test('succeeds with stauts code 201 when data is valid', async () => {
+  test('succeeds with status code 201 when data is valid', async () => {
     const blogsAtStart = await helper.blogsInDb()
     const newBlog = helper.newBlog
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -113,6 +122,7 @@ describe('addition of a new blog', () => {
 
     await api
       .post(helper.blogApi)
+      .set('Authorization', `bearer ${token}`)
       .send(blog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -123,8 +133,12 @@ describe('addition of a new blog', () => {
     expect(lastBlog.likes).toBe(0)
   })
 
-  test('fails with status code 400 if data is invaild', async () => {
+  test('fails with status code 400 when data is invaild', async () => {
     await api.post(helper.blogApi).send(helper.blogWithInvalidData).expect(400)
+  })
+
+  test('fails with status code 401 when token is missing', async () => {
+    await api.post(helper.blogApi).send(helper.newBlog).expect(401)
   })
 })
 
@@ -132,22 +146,36 @@ describe('addition of a new blog', () => {
  * Tests for the api DELETE route
  */
 describe('deletion of a blog', () => {
-  test('succeeds with status code 204 when id is valid', async () => {
+  test('succeeds with status code 204 when id and token are valid', async () => {
     const blogsAtStart = await helper.blogsInDb()
-    const blogToDelete = blogsAtStart[0]
+    const newBlog = {
+      title: 'Sporuman',
+      url: 'is.en.gard',
+    }
 
-    await api.delete(`${helper.blogApi}/${blogToDelete.id}`).expect(204)
+    const savedBlog = await api
+      .post(helper.blogApi)
+      .set('Authorization', `bearer ${token}`)
+      .send(newBlog)
+
+    await api
+      .delete(`${helper.blogApi}/${savedBlog.body.id}`)
+      .set('Authorization', `bearer ${token}`)
+      .expect(204)
 
     const blogsAtEnd = await helper.blogsInDb()
 
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)
-    expect(blogsAtEnd).not.toContainEqual(expect.objectContaining(blogToDelete))
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length)
+    expect(blogsAtEnd).not.toContainEqual(expect.objectContaining(newBlog))
   })
 
   test('fails with status code 404 when resource does not exist', async () => {
     const validNonexistingId = await helper.nonExistingId()
 
-    await api.delete(`${helper.blogApi}/${validNonexistingId}`).expect(404)
+    await api
+      .delete(`${helper.blogApi}/${validNonexistingId}`)
+      .set('Authorization', `bearer ${token}`)
+      .expect(404)
   })
 })
 

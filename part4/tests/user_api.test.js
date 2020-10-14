@@ -12,38 +12,34 @@ const User = require('../models/user')
  */
 beforeEach(async () => {
   await User.deleteMany({})
+
+  const usersWithHashedPasswords = await Promise.all(
+    helper.initialUsers.map(async user => {
+      const passwordHash = await bcrypt.hash(user.password, 10)
+
+      return {
+        username: user.username,
+        name: user.name,
+        passwordHash,
+      }
+    })
+  )
+
+  const userObjects = usersWithHashedPasswords.map(
+    user =>
+      new User({
+        ...user,
+      })
+  )
+
+  const promiseArray = userObjects.map(user => user.save())
+  await Promise.all(promiseArray)
 })
 
 /**
  * Test the read function of the user API
  */
 describe('when there are initially some users in db', () => {
-  beforeEach(async () => {
-    await User.deleteMany({})
-
-    const usersWithHashedPasswords = await Promise.all(
-      helper.initialUsers.map(async user => {
-        const passwordHash = await bcrypt.hash(user.password, 10)
-
-        return {
-          username: user.username,
-          name: user.name,
-          passwordHash,
-        }
-      })
-    )
-
-    const userObjects = usersWithHashedPasswords.map(
-      user =>
-        new User({
-          ...user,
-        })
-    )
-
-    const promiseArray = userObjects.map(user => user.save())
-    await Promise.all(promiseArray)
-  })
-
   test('users are returned as json', async () => {
     await api
       .get(helper.userApi)
