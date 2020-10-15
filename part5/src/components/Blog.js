@@ -1,9 +1,18 @@
 import React, { useState } from 'react'
-const Blog = ({ blog }) => {
+
+const Blog = ({ blog, updateBlog }) => {
   const { title, author, url, likes } = blog
   const [visible, setVisible] = useState(false)
 
-  const toggleVisibility = () => setVisible(!visible)
+  const toggleVisibility = () => setVisible(visible => !visible)
+
+  const addLike = () => {
+    updateBlog({
+      ...blog,
+      likes: blog.likes + 1,
+      user: blog.user.id,
+    })
+  }
 
   const blogStyle = {
     display: 'flex',
@@ -39,7 +48,7 @@ const Blog = ({ blog }) => {
               </tr>
             </tbody>
           </table>
-          <button>Like</button>
+          <button onClick={addLike}>Like</button>
         </div>
       ) : (
         <div>

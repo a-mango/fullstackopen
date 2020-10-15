@@ -120,6 +120,26 @@ const App = () => {
     }
   }
 
+  const updateBlog = async updatedBlog => {
+    try {
+      // Put request via blogService
+      const returnedBlog = await blogService.update(updatedBlog.id, updatedBlog)
+      console.log(returnedBlog)
+
+      // Replace updated blog in state
+      setBlogs(
+        blogs.map(blog => (blog.id === returnedBlog.id ? returnedBlog : blog))
+      )
+
+      handleNotification('Success', `Blog "${returnedBlog.title}" was updated`)
+    } catch (exception) {
+      handleNotification(
+        'Error',
+        'There was a problem while updating the blog'
+      )
+    }
+  }
+
   /**
    * Login form component
    */
@@ -180,12 +200,11 @@ const App = () => {
           {logoutForm()}
           {blogForm()}
 
-
           <h2>Saved blogs</h2>
-          <div style={{width: '35vw'}}>
-          {blogs.map(blog => (
-            <Blog key={blog.id} blog={blog} />
-          ))}
+          <div style={{ width: '35vw' }}>
+            {blogs.map(blog => (
+              <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+            ))}
           </div>
         </div>
       )}
