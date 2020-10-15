@@ -6,11 +6,10 @@ import loginService from './services/login'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
+import LoginForm from './components/LoginForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [notification, setNotification] = useState(null)
   const blogFormRef = useRef()
@@ -55,13 +54,9 @@ const App = () => {
    * login api and saving the returned user to state
    * and localStorage
    */
-  const handleLogin = async event => {
-    event.preventDefault()
+  const handleLogin = async userObject => {
     try {
-      const user = await loginService.login({
-        username,
-        password,
-      })
+      const user = await loginService.login(userObject)
 
       // Save user to local storage
       window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
@@ -71,9 +66,8 @@ const App = () => {
 
       // Modify app state
       setUser(user)
-      setUsername('')
-      setPassword('')
 
+      // Notify user
       handleNotification('Success', `Authenticated as ${user.username}`)
     } catch (exception) {
       handleNotification(
@@ -133,43 +127,14 @@ const App = () => {
 
       handleNotification('Success', `Blog "${returnedBlog.title}" was updated`)
     } catch (exception) {
-      handleNotification(
-        'Error',
-        'There was a problem while updating the blog'
-      )
+      handleNotification('Error', 'There was a problem while updating the blog')
     }
   }
 
   /**
    * Login form component
    */
-  const loginForm = () => (
-    <div>
-      <h2>Log in to the application</h2>
-
-      <form onSubmit={handleLogin}>
-        <div>
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            value={username}
-            name="username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            value={password}
-            name="password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button type="submit">Login</button>
-      </form>
-    </div>
-  )
+  const loginForm = () => <LoginForm loginUser={handleLogin} />
 
   /**
    * Blog form component
