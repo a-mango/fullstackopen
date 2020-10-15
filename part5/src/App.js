@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
+import BlogForm from './components/BlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
   const [notification, setNotification] = useState(null)
+  const blogFormRef = useRef()
 
   /**
    * Fetch all blogs when app is rendered
@@ -32,7 +32,10 @@ const App = () => {
       const user = JSON.parse(loggedUserJson)
       setUser(user)
       blogService.setToken(user.token)
-      handleNotification("Info", `Automatically authenticated as ${user.username}`)
+      handleNotification(
+        'Info',
+        `Automatically authenticated as ${user.username}`
+      )
     }
   }, [])
 
@@ -71,9 +74,12 @@ const App = () => {
       setUsername('')
       setPassword('')
 
-      handleNotification("Success", `Authenticated as ${user.username}`)
+      handleNotification('Success', `Authenticated as ${user.username}`)
     } catch (exception) {
-      handleNotification("Error", `Authentication failed. Verify the username and password and try again`)
+      handleNotification(
+        'Error',
+        `Authentication failed. Verify the username and password and try again`
+      )
     }
   }
 
@@ -87,22 +93,13 @@ const App = () => {
     // Reset state
     setUser(null)
 
-    handleNotification("Success", `User logged out`)
+    handleNotification('Success', `User logged out`)
   }
 
   /**
    * Handle addition of a blog
    */
-  const addBlog = async event => {
-    event.preventDefault()
-
-    // Create an object with data from form
-    const blogObject = {
-      title,
-      author,
-      url,
-    }
-
+  const addBlog = async blogObject => {
     try {
       // Post the data to the server
       const returnedBlog = await blogService.create(blogObject)
@@ -110,10 +107,8 @@ const App = () => {
       // Update state
       setBlogs(blogs.concat(returnedBlog))
 
-      // Reset form state
-      setTitle('')
-      setAuthor('')
-      setUrl('')
+      // Toggle blog form
+      blogFormRef.current.toggleVisibility()
 
       // Notify the user
       handleNotification('Success', `A new blog was added to the database`)
@@ -160,40 +155,9 @@ const App = () => {
    * Blog form component
    */
   const blogForm = () => (
-    <div>
-      <h2>Add a new blog</h2>
-
-      <form onSubmit={addBlog}>
-        <div>
-          <label htmlFor="title">Title:</label>
-          <input
-            type="text"
-            value={title}
-            name="title"
-            onChange={({ target }) => setTitle(target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="author">Author:</label>
-          <input
-            type="text"
-            value={author}
-            name="author"
-            onChange={({ target }) => setAuthor(target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="url">Url:</label>
-          <input
-            type="text"
-            value={url}
-            name="url"
-            onChange={({ target }) => setUrl(target.value)}
-          />
-        </div>
-        <button type="submit">Add blog</button>
-      </form>
-    </div>
+    <Togglable buttonLabel="Add blog" ref={blogFormRef}>
+      <BlogForm createBlog={addBlog} />
+    </Togglable>
   )
 
   const logoutForm = () => (
@@ -216,10 +180,13 @@ const App = () => {
           {logoutForm()}
           {blogForm()}
 
+
           <h2>Saved blogs</h2>
+          <div style={{width: '35vw'}}>
           {blogs.map(blog => (
             <Blog key={blog.id} blog={blog} />
           ))}
+          </div>
         </div>
       )}
     </div>
