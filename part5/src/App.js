@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -7,6 +6,7 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
+import BlogList from './components/BlogList'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -16,9 +16,12 @@ const App = () => {
 
   /**
    * Fetch all blogs when app is rendered
+   * and sort them by likes
    */
   useEffect(() => {
-    blogService.getAll().then(blogs => setBlogs(blogs))
+    blogService
+      .getAll()
+      .then(blogs => setBlogs(blogs))
   }, [])
 
   /**
@@ -114,6 +117,9 @@ const App = () => {
     }
   }
 
+  /**
+   * Handle updation of a blog
+   */
   const updateBlog = async updatedBlog => {
     try {
       // Put request via blogService
@@ -132,13 +138,10 @@ const App = () => {
   }
 
   /**
-   * Login form component
+   * Form components
    */
   const loginForm = () => <LoginForm loginUser={handleLogin} />
 
-  /**
-   * Blog form component
-   */
   const blogForm = () => (
     <Togglable buttonLabel="Add blog" ref={blogFormRef}>
       <BlogForm createBlog={addBlog} />
@@ -152,6 +155,7 @@ const App = () => {
     </div>
   )
 
+  
   // Show login form if user is not logged in,
   // otherwise show blog list and controls
   return (
@@ -165,12 +169,7 @@ const App = () => {
           {logoutForm()}
           {blogForm()}
 
-          <h2>Saved blogs</h2>
-          <div style={{ width: '35vw' }}>
-            {blogs.map(blog => (
-              <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
-            ))}
-          </div>
+          <BlogList blogs={blogs} updateBlog={updateBlog} />
         </div>
       )}
     </div>
