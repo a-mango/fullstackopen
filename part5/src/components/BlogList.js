@@ -1,7 +1,7 @@
 import React from 'react'
 import Blog from './Blog'
 
-const BlogList = ({ blogs, updateBlog }) => {
+const BlogList = ({ blogs, user, updateBlog, removeBlog }) => {
   const style = {
     width: '35vw',
   }
@@ -13,7 +13,7 @@ const BlogList = ({ blogs, updateBlog }) => {
         {blogs && blogs
           .sort((a, b) => b.likes - a.likes)
           .map(blog => (
-            <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+            <Blog key={blog.id} blog={blog} updateBlog={updateBlog} removeBlog={removeBlog} user={user} />
           ))}
       </div>
     </div>

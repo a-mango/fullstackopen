@@ -19,9 +19,7 @@ const App = () => {
    * and sort them by likes
    */
   useEffect(() => {
-    blogService
-      .getAll()
-      .then(blogs => setBlogs(blogs))
+    blogService.getAll().then(blogs => setBlogs(blogs))
   }, [])
 
   /**
@@ -100,9 +98,17 @@ const App = () => {
     try {
       // Post the data to the server
       const returnedBlog = await blogService.create(blogObject)
+      
+      // Update returnedBlog with user.username instead of id
+      const addedBlog = {
+        ...returnedBlog,
+        user: {
+          username: user.username
+        }
+      }
 
       // Update state
-      setBlogs(blogs.concat(returnedBlog))
+      setBlogs(blogs.concat(addedBlog))
 
       // Toggle blog form
       blogFormRef.current.toggleVisibility()
@@ -138,6 +144,23 @@ const App = () => {
   }
 
   /**
+   * Handle removal of a blog
+   */
+  const removeBlog = async id => {
+    try {
+      // Remove blog through blogService
+      blogService.remove(id)
+
+      // Filter the deleted blog out of app state
+      setBlogs(blogs.filter(blog => blog.id !== id))
+
+      handleNotification('Success', `Blog was deleted`)
+    } catch (exception) {
+      handleNotification('Error', 'There was a problem while deleting the blog')
+    }
+  }
+
+  /**
    * Form components
    */
   const loginForm = () => <LoginForm loginUser={handleLogin} />
@@ -155,7 +178,6 @@ const App = () => {
     </div>
   )
 
-  
   // Show login form if user is not logged in,
   // otherwise show blog list and controls
   return (
@@ -168,8 +190,12 @@ const App = () => {
         <div>
           {logoutForm()}
           {blogForm()}
-
-          <BlogList blogs={blogs} updateBlog={updateBlog} />
+          <BlogList
+            blogs={blogs}
+            updateBlog={updateBlog}
+            removeBlog={removeBlog}
+            user={user}
+          />
         </div>
       )}
     </div>
