@@ -73,7 +73,7 @@ const App = () => {
     } catch (exception) {
       handleNotification(
         'Error',
-        `Authentication failed. Verify the username and password and try again`
+        'Authentication failed. Verify the username and password and try again'
       )
     }
   }
@@ -88,7 +88,7 @@ const App = () => {
     // Reset state
     setUser(null)
 
-    handleNotification('Success', `User logged out`)
+    handleNotification('Success', 'User logged out')
   }
 
   /**
@@ -98,13 +98,13 @@ const App = () => {
     try {
       // Post the data to the server
       const returnedBlog = await blogService.create(blogObject)
-      
+
       // Update returnedBlog with user.username instead of id
       const addedBlog = {
         ...returnedBlog,
         user: {
-          username: user.username
-        }
+          username: user.username,
+        },
       }
 
       // Update state
@@ -114,7 +114,7 @@ const App = () => {
       blogFormRef.current.toggleVisibility()
 
       // Notify the user
-      handleNotification('Success', `A new blog was added to the database`)
+      handleNotification('Success', 'A new blog was added to the database')
     } catch (exception) {
       handleNotification(
         'Error',
@@ -154,7 +154,7 @@ const App = () => {
       // Filter the deleted blog out of app state
       setBlogs(blogs.filter(blog => blog.id !== id))
 
-      handleNotification('Success', `Blog was deleted`)
+      handleNotification('Success', 'Blog was deleted')
     } catch (exception) {
       handleNotification('Error', 'There was a problem while deleting the blog')
     }
