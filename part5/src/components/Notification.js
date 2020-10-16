@@ -5,11 +5,11 @@ const Notification = ({ notification }) => {
   if (!notification) {
     return null
   }
-  
+
   const { type, message } = notification
 
   return (
-    <div>
+    <div className='Notification'>
       <p>
         <strong>{type}</strong>: {message}
       </p>

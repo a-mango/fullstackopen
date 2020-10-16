@@ -30,7 +30,7 @@ const Blog = ({ blog, user, updateBlog, removeBlog }) => {
   }
 
   return (
-    <div style={blogStyle}>
+    <div className='Blog' style={blogStyle}>
       {visible ? (
         <div>
           <table>
@@ -76,7 +76,7 @@ Blog.propTypes = {
   blog: PropTypes.shape().isRequired,
   user: PropTypes.shape().isRequired,
   updateBlog: PropTypes.func.isRequired,
-  removeBlog: PropTypes.func.isRequired
+  removeBlog: PropTypes.func.isRequired,
 }
 
 export default Blog

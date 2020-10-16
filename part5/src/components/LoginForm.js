@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 const LoginForm = ({
@@ -10,12 +10,12 @@ const LoginForm = ({
   const handleLogin = event => {
     event.preventDefault()
 
-    loginUser({username, password})
+    loginUser({ username, password })
     setUsername('')
     setPassword('')
   }
   return (
-    <div>
+    <div className='LoginForm'>
       <h2>Log in to the application</h2>
 
       <form onSubmit={handleLogin}>

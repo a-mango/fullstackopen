@@ -8,7 +8,7 @@ const BlogList = ({ blogs, user, updateBlog, removeBlog }) => {
   }
 
   return (
-    <div>
+    <div className='BlogList'>
       <h2>Saved blogs</h2>
       <div style={style}>
         {blogs && blogs
