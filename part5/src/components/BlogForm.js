@@ -22,7 +22,7 @@ const BlogForm = ({ createBlog }) => {
   }
 
   return (
-    <div className='BlogForm'>
+    <div className="BlogForm">
       <h2>Add a new blog</h2>
 
       <form onSubmit={addBlog}>
@@ -30,6 +30,7 @@ const BlogForm = ({ createBlog }) => {
           <div>
             <label htmlFor="title">Title:</label>
             <input
+              id="title"
               type="text"
               value={title}
               name="title"
@@ -39,6 +40,7 @@ const BlogForm = ({ createBlog }) => {
           <div>
             <label htmlFor="author">Author:</label>
             <input
+              id="author"
               type="text"
               value={author}
               name="author"
@@ -48,6 +50,7 @@ const BlogForm = ({ createBlog }) => {
           <div>
             <label htmlFor="url">Url:</label>
             <input
+              id="url"
               type="text"
               value={url}
               name="url"
@@ -62,7 +65,7 @@ const BlogForm = ({ createBlog }) => {
 }
 
 BlogForm.propTypes = {
-  createBlog: PropTypes.func.isRequired
+  createBlog: PropTypes.func.isRequired,
 }
 
 export default BlogForm
