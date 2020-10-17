@@ -32,7 +32,7 @@ const Blog = ({ blog, user, updateBlog, removeBlog }) => {
   return (
     <div className='Blog' style={blogStyle}>
       {visible ? (
-        <div>
+        <div className='BlogDetail'>
           <table>
             <tbody>
               <tr>
@@ -61,7 +61,7 @@ const Blog = ({ blog, user, updateBlog, removeBlog }) => {
           ) : null}
         </div>
       ) : (
-        <div>
+        <div className='BlogSummary'>
           <p>
             {title} - {author}
           </p>
