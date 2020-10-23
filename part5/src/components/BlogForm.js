@@ -28,7 +28,7 @@ const BlogForm = ({ createBlog }) => {
       <form id="blog-form" onSubmit={addBlog}>
         <fieldset>
           <div>
-            <label htmlFor="title">Title:</label>
+            <label htmlFor="blog-title">Title:</label>
             <input
               id="blog-title"
               type="text"
@@ -38,7 +38,7 @@ const BlogForm = ({ createBlog }) => {
             />
           </div>
           <div>
-            <label htmlFor="author">Author:</label>
+            <label htmlFor="blog-author">Author:</label>
             <input
               id="blog-author"
               type="text"
@@ -48,7 +48,7 @@ const BlogForm = ({ createBlog }) => {
             />
           </div>
           <div>
-            <label htmlFor="url">Url:</label>
+            <label htmlFor="blog-url">Url:</label>
             <input
               id="blog-url"
               type="text"
