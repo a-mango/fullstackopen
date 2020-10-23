@@ -25,12 +25,12 @@ const BlogForm = ({ createBlog }) => {
     <div className="BlogForm">
       <h2>Add a new blog</h2>
 
-      <form onSubmit={addBlog}>
+      <form id="blog-form" onSubmit={addBlog}>
         <fieldset>
           <div>
             <label htmlFor="title">Title:</label>
             <input
-              id="title"
+              id="blog-title"
               type="text"
               value={title}
               name="title"
@@ -40,7 +40,7 @@ const BlogForm = ({ createBlog }) => {
           <div>
             <label htmlFor="author">Author:</label>
             <input
-              id="author"
+              id="blog-author"
               type="text"
               value={author}
               name="author"
@@ -50,14 +50,16 @@ const BlogForm = ({ createBlog }) => {
           <div>
             <label htmlFor="url">Url:</label>
             <input
-              id="url"
+              id="blog-url"
               type="text"
               value={url}
               name="url"
               onChange={({ target }) => setUrl(target.value)}
             />
           </div>
-          <button type="submit">Add blog</button>
+          <button id="blog-submit" type="submit">
+            Add blog
+          </button>
         </fieldset>
       </form>
     </div>
