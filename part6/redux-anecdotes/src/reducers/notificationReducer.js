@@ -9,7 +9,7 @@ const reducer = (state = 'TEST', action) => {
   }
 }
 
-export const addNotification = message => {
+export const setNotification = message => {
   return {
     type: 'SET_NOTIFICATION',
     data: {
@@ -18,7 +18,7 @@ export const addNotification = message => {
   }
 }
 
-export const removeNotification = () => {
+export const clearNotification = () => {
   return {
     type: 'CLEAR_NOTIFICATION',
   }
