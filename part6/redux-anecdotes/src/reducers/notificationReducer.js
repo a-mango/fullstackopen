@@ -1,4 +1,4 @@
-const reducer = (state = 'TEST', action) => {
+const reducer = (state = '', action) => {
   switch (action.type) {
     case 'SET_NOTIFICATION':
       return action.data.message
