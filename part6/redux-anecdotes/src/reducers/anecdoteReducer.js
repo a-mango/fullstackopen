@@ -1,10 +1,3 @@
-const asObject = anecdote => {
-  return {
-    content: anecdote,
-    votes: 0,
-  }
-}
-
 const reducer = (state = [], action) => {
   console.log('state now: ', state)
   console.log('action', action)
@@ -30,10 +23,10 @@ const reducer = (state = [], action) => {
   }
 }
 
-export const createAnecdote = content => {
+export const createAnecdote = data => {
   return {
     type: 'ADD_ANECDOTE',
-    data: asObject(content),
+    data,
   }
 }
 
