@@ -1,3 +1,5 @@
+let timeoutId
+
 const reducer = (state = '', action) => {
   switch (action.type) {
     case 'SET_NOTIFICATION':
@@ -11,11 +13,15 @@ const reducer = (state = '', action) => {
 
 export const setNotification = (message, timeout) => {
   return async dispatch => {
+    window.clearTimeout(timeoutId)
+    timeoutId = window.setTimeout(
+      () => dispatch(clearNotification()),
+      timeout * 1000
+    )
     dispatch({
       type: 'SET_NOTIFICATION',
       message,
     })
-    setTimeout(() => dispatch(clearNotification()), (timeout * 1000))
   }
 }
 
