@@ -5,9 +5,8 @@ import {
   setNotification,
   clearNotification,
 } from '../reducers/notificationReducer'
-import anecdoteService from '../services/anecdotes'
 
-const AnecdoteForm = props => {
+const AnecdoteForm = () => {
   const dispatch = useDispatch()
 
   const addAnecdote = async event => {
