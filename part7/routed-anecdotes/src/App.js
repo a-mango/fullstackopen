@@ -1,5 +1,11 @@
 import React, { useState } from 'react'
-import { Router, Switch, Route, Link, useHistory } from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useHistory,
+} from 'react-router-dom'
 
 const Menu = () => {
   const padding = {
@@ -157,8 +163,8 @@ const App = () => {
   return (
     <Router>
       <h1>Software anecdotes</h1>
+      <Menu />
       <Switch>
-        <Menu />
         <Route path="/create">
           <CreateNew addNew={addNew} />
         </Route>
