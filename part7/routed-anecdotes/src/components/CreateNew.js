@@ -5,7 +5,7 @@ const CreateNew = props => {
   const content = useField('text')
   const author = useField('text')
   const info = useField('text')
-
+  
   // const [content, setContent] = useState('')
   // const [author, setAuthor] = useState('')
   // const [info, setInfo] = useState('')
@@ -32,15 +32,15 @@ const CreateNew = props => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input {...content} />
+          <input {...content} reset={null} />
         </div>
         <div>
           author
-          <input {...author} />
+          <input {...author} reset={null} />
         </div>
         <div>
           url for more info
-          <input {...info} />
+          <input {...info} reset={null} />
         </div>
         <button>create</button>
         <input type="reset" onClick={handleReset} value="reset" />
