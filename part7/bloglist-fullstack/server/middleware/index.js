@@ -1,6 +1,9 @@
 const morgan = require('morgan')
+const logger = require('@util/logger')
 
-const logger = morgan('tiny')
+const requestLogger = morgan('tiny', {
+  skip: (req, res) => process.env.NODE_ENV === 'test',
+})
 
 const tokenExtractor = (request, response, next) => {
   const authorization = request.get('authorization')
@@ -19,7 +22,7 @@ const unknownEndpoint = (request, response) => {
 }
 
 const errorHandler = (error, req, res, next) => {
-  console.error(error.message, error.name, error.extra)
+  logger.info(error.message)
 
   if (error.name === 'ApplicationError') {
     return res.status(error.status).send({ error: error.message })
@@ -30,7 +33,7 @@ const errorHandler = (error, req, res, next) => {
 }
 
 module.exports = {
-  logger,
+  requestLogger,
   tokenExtractor,
   unknownEndpoint,
   errorHandler,

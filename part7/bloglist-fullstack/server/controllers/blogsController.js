@@ -21,8 +21,8 @@ blogsRouter.post('/', async (request, response) => {
     throw new ApplicationError('Title and url are required', 400)
   }
 
-  // Token precense check has to come before token decoding
-  // otherwise it will always forware to the errorHandler middlware
+  // Token presence check has to come before token decoding
+  // otherwise it will always forward to the errorHandler middlware
   if (!request.token) {
     throw new ApplicationError('Token is missing or invalid', 401)
   }
