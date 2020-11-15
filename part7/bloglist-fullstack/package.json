@@ -1,24 +1,25 @@
 {
-  "name": "create-app",
+  "name": "bloglist-fullstack",
+  "author": "a-mango",
   "version": "1.0.0",
-  "description": "A boilerplate",
+  "description": "A fullstack blog database application",
+  "license": "ISC",
+  "private": true,
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "start": "cross-env NODE_ENV=production node index.js",
     "build": "webpack --mode=production",
     "lint": "eslint .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_ENV=test jest --verbose --runInBand"
   },
   "engines": {
     "node": ">=10.15"
   },
-  "author": "Jami Kousa",
-  "license": "ISC",
   "dependencies": {
-    "@babel/core": "^7.8.3",
+    "@babel/core": "^7.12.3",
     "@babel/polyfill": "^7.8.3",
-    "@babel/preset-env": "^7.8.3",
+    "@babel/preset-env": "^7.12.1",
     "@babel/preset-react": "^7.8.3",
     "@babel/register": "^7.8.3",
     "axios": "^0.19.2",
@@ -59,7 +60,11 @@
     "webpack-cli": "^3.3.10"
   },
   "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.12.1",
+    "babel-jest": "^26.6.3",
+    "jest": "^26.6.3",
     "nodemon": "^2.0.2",
+    "supertest": "^6.0.1",
     "webpack-dev-middleware": "^3.7.2",
     "webpack-dev-server": "^3.10.1",
     "webpack-hot-middleware": "^2.25.0"
@@ -77,5 +82,8 @@
     "@models": "server/models",
     "@middleware": "server/middleware",
     "@util": "server/util"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
