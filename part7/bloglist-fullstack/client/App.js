@@ -1,4 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { initializeBlogs } from 'Utilities/reducers/blogReducer'
+import { setUser } from 'Utilities/reducers/userReducer'
+
 import blogService from 'Utilities/services/blogs'
 import loginService from 'Utilities/services/login'
 
@@ -11,35 +15,33 @@ import LoginForm from 'Components/LoginForm'
 import BlogList from 'Components/BlogView/BlogList'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
-  const [user, setUser] = useState(null)
+  const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
+
+  useEffect(() => {
+    try {
+      dispatch(initializeBlogs())
+      // Raise notification
+    } catch (exception) {
+      // Raise notification
+    }
+  }, [dispatch])
+
+  useEffect(() => {
+    try {
+      const loggedUserJson = window.localStorage.getItem('loggedBlogAppUser')
+      if (loggedUserJson) {
+        const user = JSON.parse(loggedUserJson)
+        dispatch(setUser(user))
+        // Raise notification
+      }
+    } catch (exception) {
+      // Raise notification
+    }
+  }, [dispatch])
+
   const [notification, setNotification] = useState(null)
   const blogFormRef = useRef()
-
-  /**
-   * Fetch all blogs when app is rendered
-   * and sort them by likes
-   */
-  useEffect(() => {
-    blogService.getAll().then(blogs => setBlogs(blogs))
-  }, [])
-
-  /**
-   * Try to login the user with data stored in localStorage
-   * when app is rendered
-   */
-  useEffect(() => {
-    const loggedUserJson = window.localStorage.getItem('loggedBlogAppUser')
-    if (loggedUserJson) {
-      const user = JSON.parse(loggedUserJson)
-      setUser(user)
-      blogService.setToken(user.token)
-      handleNotification(
-        'Info',
-        `Automatically authenticated as ${user.username}`
-      )
-    }
-  }, [])
 
   /**
    * Handles the display of a notification message
@@ -126,43 +128,6 @@ const App = () => {
   }
 
   /**
-   * Handle updation of a blog
-   */
-  const updateBlog = async updatedBlog => {
-    try {
-      // Put request via blogService
-      const returnedBlog = await blogService.update(updatedBlog.id, updatedBlog)
-      console.log(returnedBlog)
-
-      // Replace updated blog in state
-      setBlogs(
-        blogs.map(blog => (blog.id === returnedBlog.id ? returnedBlog : blog))
-      )
-
-      handleNotification('Success', `Blog "${returnedBlog.title}" was updated`)
-    } catch (exception) {
-      handleNotification('Error', 'There was a problem while updating the blog')
-    }
-  }
-
-  /**
-   * Handle removal of a blog
-   */
-  const removeBlog = async id => {
-    try {
-      // Remove blog through blogService
-      blogService.remove(id)
-
-      // Filter the deleted blog out of app state
-      setBlogs(blogs.filter(blog => blog.id !== id))
-
-      handleNotification('Success', 'Blog was deleted')
-    } catch (exception) {
-      handleNotification('Error', 'There was a problem while deleting the blog')
-    }
-  }
-
-  /**
    * Form components
    */
   const loginForm = () => <LoginForm loginUser={handleLogin} />
@@ -192,12 +157,7 @@ const App = () => {
         <div>
           {logoutForm()}
           {blogForm()}
-          <BlogList
-            blogs={blogs}
-            updateBlog={updateBlog}
-            removeBlog={removeBlog}
-            user={user}
-          />
+          <BlogList />
         </div>
       )}
       <Footer />
