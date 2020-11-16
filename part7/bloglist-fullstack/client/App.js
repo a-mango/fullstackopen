@@ -2,11 +2,13 @@ import React, { useState, useEffect, useRef } from 'react'
 import blogService from 'Utilities/services/blogs'
 import loginService from 'Utilities/services/login'
 
+import Nav from 'Components/Nav'
+import Footer from 'Components/Footer'
 import Notification from 'Components/Notification'
 import Togglable from 'Components/Togglable'
-import BlogForm from 'Components/BlogForm'
+import BlogForm from 'Components/BlogView/BlogForm'
 import LoginForm from 'Components/LoginForm'
-import BlogList from 'Components/BlogList'
+import BlogList from 'Components/BlogView/BlogList'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -182,7 +184,7 @@ const App = () => {
   // otherwise show blog list and controls
   return (
     <div>
-      <h1>Blogs</h1>
+      <Nav />
       <Notification notification={notification} />
       {user === null ? (
         loginForm()
@@ -198,6 +200,7 @@ const App = () => {
           />
         </div>
       )}
+      <Footer />
     </div>
   )
 }
