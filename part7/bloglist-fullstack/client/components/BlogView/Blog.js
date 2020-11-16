@@ -1,23 +1,40 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useSelector, useDispatch } from 'react-redux'
+import { updateBlog, deleteBlog } from 'Utilities/reducers/blogReducer'
 
-const Blog = ({ blog, user, updateBlog, removeBlog }) => {
-  const { title, author, url, likes } = blog
+const Blog = ({ blog }) => {
+  const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
   const [visible, setVisible] = useState(false)
-
   const toggleVisibility = () => setVisible(visible => !visible)
+  const { title, author, url, likes } = blog
 
   const addLike = () => {
-    updateBlog({
-      ...blog,
-      likes: blog.likes + 1,
-      user: blog.user.id,
-    })
+    try {
+
+      dispatch(
+        updateBlog({
+          ...blog,
+          likes: blog.likes + 1,
+          user: blog.user.id,
+        })
+        )
+        // Raise notification
+
+      } catch(exception) {
+        // Raise notification
+      }
   }
 
-  const deleteBlog = () => {
-    if (window.confirm(`Do you really wish to delete blog ${blog.title} ?`)) {
-      removeBlog(blog.id)
+  const removeBlog = () => {
+    try {
+      if (window.confirm(`Do you really wish to delete blog ${blog.title} ?`)) {
+        dispatch(deleteBlog(blog.id))
+      }
+        // Raise notification
+    } catch (exception) {
+      // Raise notification
     }
   }
 
@@ -30,9 +47,9 @@ const Blog = ({ blog, user, updateBlog, removeBlog }) => {
   }
 
   return (
-    <div className='Blog' style={blogStyle}>
+    <div className="Blog" style={blogStyle}>
       {visible ? (
-        <div className='BlogDetail'>
+        <div className="BlogDetail">
           <table>
             <tbody>
               <tr>
@@ -57,11 +74,11 @@ const Blog = ({ blog, user, updateBlog, removeBlog }) => {
           </table>
           <button onClick={addLike}>Like</button>
           {blog.user.username === user.username ? (
-            <button onClick={deleteBlog}>Delete</button>
+            <button onClick={removeBlog}>Delete</button>
           ) : null}
         </div>
       ) : (
-        <div className='BlogSummary'>
+        <div className="BlogSummary">
           <p>
             {title} - {author}
           </p>
@@ -74,9 +91,6 @@ const Blog = ({ blog, user, updateBlog, removeBlog }) => {
 
 Blog.propTypes = {
   blog: PropTypes.shape().isRequired,
-  user: PropTypes.shape().isRequired,
-  updateBlog: PropTypes.func.isRequired,
-  removeBlog: PropTypes.func.isRequired,
 }
 
 export default Blog
