@@ -1,5 +1,4 @@
 import blogService from 'Utilities/services/blogs'
-
 const INIT_BLOGS = 'INIT_BLOGS'
 const ADD_BLOG = 'ADD_BLOG'
 const DELETE_BLOG = 'DELETE_BLOG'
@@ -32,9 +31,15 @@ export const initializeBlogs = () => {
   }
 }
 
-export const createBlog = content => {
+export const createBlog = (content, user) => {
   return async dispatch => {
-    const newBlog = await blogService.create(content)
+    const returnedBlog = await blogService.create(content)
+    const newBlog = {
+      ...returnedBlog,
+      user: {
+        username: user.username,
+      },
+    }
     dispatch({
       type: ADD_BLOG,
       data: newBlog,
