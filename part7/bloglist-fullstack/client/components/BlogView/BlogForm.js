@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import { useSelector, useDispatch } from 'react-redux'
+import { createBlog } from 'Utilities/reducers/blogReducer'
 
-const BlogForm = ({ createBlog }) => {
+const BlogForm = () => {
+  const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
+
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -9,16 +13,34 @@ const BlogForm = ({ createBlog }) => {
   const addBlog = event => {
     event.preventDefault()
 
-    createBlog({
-      title,
-      author,
-      url,
-    })
+    try {
+      dispatch(
+        createBlog(
+          {
+            title,
+            author,
+            url,
+          },
+          user
+        )
+      )
 
-    // Reset form state
-    setTitle('')
-    setAuthor('')
-    setUrl('')
+      // Reset form state
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+
+      // Toggle blog form
+      // blogFormRef.current.toggleVisibility()
+
+      // Notify the user
+      // handleNotification('Success', 'A new blog was added to the database')
+    } catch (exception) {
+      // handleNotification(
+      //   'Error',
+      //   'There was a problem while adding a blog to the database'
+      // )
+    }
   }
 
   return (
@@ -64,10 +86,6 @@ const BlogForm = ({ createBlog }) => {
       </form>
     </div>
   )
-}
-
-BlogForm.propTypes = {
-  createBlog: PropTypes.func.isRequired,
 }
 
 export default BlogForm
