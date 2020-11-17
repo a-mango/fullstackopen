@@ -6,34 +6,13 @@ const User = require('@models/userModel')
 const Comment = require('@models/commentModel')
 
 /**
- * Blog api comment post route
- */
-blogsRouter.post('/:id/comments', async (request, response) => {
-  const id = request.params.id
-  const body = request.body
-
-  if(!id || !body.message) {
-    throw new ApplicationError('Blog id and message are required', 400)
-  }
-
-  const blog = await Blog.findById(id)
-  const comment = new Comment({
-    blog: blog.id,
-    ...body
-  })
-
-  const savedComment = await comment.save()
-  blog.comments = blog.comments.concat(savedComment)
-  await blog.save()
-
-  response.status(201).json(savedComment)
-})
-
-/**
  * Blog api get route
  */
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
+  const blogs = await Blog.find({})
+    .populate('user', { username: 1, name: 1 })
+    .populate('comments')
+
   response.json(blogs)
 })
 
@@ -66,6 +45,30 @@ blogsRouter.post('/', async (request, response) => {
   await user.save()
 
   response.status(201).json(savedBlog)
+})
+
+/**
+ * Blog api comment post route
+ */
+blogsRouter.post('/:id/comments', async (request, response) => {
+  const id = request.params.id
+  const body = request.body
+
+  if (!id || !body.message) {
+    throw new ApplicationError('Blog id and message are required', 400)
+  }
+
+  const blog = await Blog.findById(id)
+  const comment = new Comment({
+    blog: blog.id,
+    ...body,
+  })
+
+  const savedComment = await comment.save()
+  blog.comments = blog.comments.concat(savedComment)
+  await blog.save()
+
+  response.status(201).json(savedComment)
 })
 
 /**
