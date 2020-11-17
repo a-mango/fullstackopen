@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { createBlog } from 'Utilities/reducers/blogReducer'
+import { setNotification } from 'Utilities/reducers/notificationReducer'
 
-const BlogForm = () => {
+const BlogForm = ({ toggleRef }) => {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
 
@@ -31,15 +32,21 @@ const BlogForm = () => {
       setUrl('')
 
       // Toggle blog form
-      // blogFormRef.current.toggleVisibility()
+      toggleRef.current.toggleVisibility()
 
-      // Notify the user
-      // handleNotification('Success', 'A new blog was added to the database')
+      dispatch(
+        setNotification({
+          type: 'success',
+          message: 'A new blog was successfuly added to the database',
+        })
+      )
     } catch (exception) {
-      // handleNotification(
-      //   'Error',
-      //   'There was a problem while adding a blog to the database'
-      // )
+      dispatch(
+        setNotification({
+          type: 'error',
+          message: 'An error has occured while adding the blog to the database',
+        })
+      )
     }
   }
 
