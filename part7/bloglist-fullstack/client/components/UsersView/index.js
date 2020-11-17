@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Switch, useRouteMatch, useParams } from 'react-router-dom'
+import { Route, Switch, useRouteMatch } from 'react-router-dom'
 import useResource from 'Hooks/use-resource'
 import { apiUrl } from 'Utilities/common'
 import UserList from 'Components/UsersView/UserList'
