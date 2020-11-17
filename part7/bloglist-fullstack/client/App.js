@@ -4,8 +4,9 @@ import { initializeBlogs } from 'Utilities/reducers/blogReducer'
 import { setNotification } from 'Utilities/reducers/notificationReducer'
 
 import Nav from 'Components/Nav'
-import Footer from 'Components/Footer'
 import Notification from 'Components/Notification'
+import Footer from 'Components/Footer'
+import Router from 'Components/Router'
 import BlogView from 'Components/BlogView'
 import UsersView from 'Components/UsersView'
 import LoginForm from 'Components/LoginForm'
@@ -32,15 +33,8 @@ const App = () => {
     <div>
       <Nav />
       <Notification />
-      {user === null ? (
-        <LoginForm />
-      ) : (
-        <div>
-          <LogoutForm />
-          <BlogView />
-          <UsersView />
-        </div>
-      )}
+      {user === null ? <LoginForm /> : <LogoutForm />}
+      <Router />
       <Footer />
     </div>
   )
