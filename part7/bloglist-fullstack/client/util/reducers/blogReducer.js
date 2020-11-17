@@ -1,4 +1,5 @@
 import blogService from 'Utilities/services/blogs'
+
 const INIT_BLOGS = 'INIT_BLOGS'
 const ADD_BLOG = 'ADD_BLOG'
 const DELETE_BLOG = 'DELETE_BLOG'
@@ -65,6 +66,16 @@ export const updateBlog = blog => {
       ...blog,
     }
     const updatedBlog = await blogService.update(blog.id, blogToUpdate)
+    dispatch({
+      type: UPDATE_BLOG,
+      data: updatedBlog,
+    })
+  }
+}
+
+export const createComment = (blog, message) => {
+  return async dispatch => {
+    const updatedBlog = await blogService.createComment(blog.id, message)
     dispatch({
       type: UPDATE_BLOG,
       data: updatedBlog,
