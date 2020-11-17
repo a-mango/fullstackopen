@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 const useResource = baseUrl => {
@@ -8,7 +9,7 @@ const useResource = baseUrl => {
     axios.get(baseUrl, headers).then(response => {
       setResources(response.data)
     })
-  }, [baseUrl])
+  }, [baseUrl, headers])
 
   const setToken = token => {
     setHeaders({ Authorization: `bearer ${token}` })
@@ -25,7 +26,10 @@ const useResource = baseUrl => {
     return response.data
   }
 
-  const getAll = async () => {}
+  const getAll = async () => {
+    const response = await axios.get(baseUrl, headers)
+    return response.data
+  }
 
   const remove = async id => {
     await axios.delete(`${baseUrl}/${id}`, headers)
