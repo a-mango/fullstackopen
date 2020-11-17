@@ -6,10 +6,9 @@ import { setNotification } from 'Utilities/reducers/notificationReducer'
 import Nav from 'Components/Nav'
 import Footer from 'Components/Footer'
 import Notification from 'Components/Notification'
-import BlogForm from 'Components/BlogView/BlogForm'
+import BlogView from 'Components/BlogView'
 import LoginForm from 'Components/LoginForm'
 import LogoutForm from 'Components/LogoutForm'
-import BlogList from 'Components/BlogView/BlogList'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -37,8 +36,7 @@ const App = () => {
       ) : (
         <div>
           <LogoutForm />
-          <BlogForm />
-          <BlogList />
+          <BlogView />
         </div>
       )}
       <Footer />
