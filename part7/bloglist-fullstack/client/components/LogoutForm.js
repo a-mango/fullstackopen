@@ -7,6 +7,10 @@ const LogoutForm = () => {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
 
+  if (!user) {
+    return null
+  }
+
   const handleLogout = () => {
     dispatch(clearUser())
     dispatch(
