@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom'
 
 const UserDetail = ({ users }) => {
   const { id } = useParams()
-  console.log(id)
   const user = users.find(u => u.id === id)
 
   if (!user) {
