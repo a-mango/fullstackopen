@@ -2,7 +2,7 @@ const morgan = require('morgan')
 const logger = require('@util/logger')
 
 const requestLogger = morgan('tiny', {
-  skip: (req, res) => process.env.NODE_ENV === 'test',
+  skip: () => process.env.NODE_ENV === 'test',
 })
 
 const tokenExtractor = (request, response, next) => {
