@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { updateBlog, deleteBlog } from 'Utilities/reducers/blogReducer'
 import { setNotification } from 'Utilities/reducers/notificationReducer'
 import CommentList from 'Components/BlogView/CommentList'
+import CommentForm from 'Components/BlogView/CommentForm'
 
 const BlogDetail = () => {
   const dispatch = useDispatch()
@@ -75,6 +76,7 @@ const BlogDetail = () => {
         ) : null}
       </div>
       <CommentList comments={blog.comments} />
+      <CommentForm blog={blog} />
     </div>
   )
 }
