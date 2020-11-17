@@ -9,6 +9,7 @@
       "@middleware/*": ["server/middleware/*"],
       "@util/*": ["server/util/*"],
       "Utilities/*": ["client/util/*"],
+      "Hooks/*": ["client/hooks/*"],
       "Components/*": ["client/components/*"],
       "Assets/*": ["client/assets/*"],
       "@root/*": ["*"],
