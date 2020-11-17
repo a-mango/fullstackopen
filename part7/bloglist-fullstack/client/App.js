@@ -7,8 +7,6 @@ import Nav from 'Components/Nav'
 import Notification from 'Components/Notification'
 import Footer from 'Components/Footer'
 import Router from 'Components/Router'
-import BlogView from 'Components/BlogView'
-import UsersView from 'Components/UsersView'
 import LoginForm from 'Components/LoginForm'
 import LogoutForm from 'Components/LogoutForm'
 
