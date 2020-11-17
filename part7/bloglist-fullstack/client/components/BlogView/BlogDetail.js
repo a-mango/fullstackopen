@@ -9,7 +9,10 @@ const BlogDetail = () => {
   const { id } = useParams()
   const blog = useSelector(state => state.blogs.find(b => b.id === id))
   const user = useSelector(state => state.user)
-  const { title, author, url, likes } = blog
+
+  if (!blog) {
+    return null
+  }
 
   const addLike = () => {
     try {
@@ -60,10 +63,10 @@ const BlogDetail = () => {
   return (
     <div className="blog-detail">
       <h2>
-        {title} {author && `by ${author}`}
+        {blog.title} {blog.author && `by ${blog.author}`}
       </h2>
-      <a href={url}>{url}</a>
-      <p>{likes} likes</p>
+      <a href={blog.url}>{blog.url}</a>
+      <p>{blog.likes} likes</p>
       <div>
         <button onClick={addLike}>Like</button>
         {blog.user.username === user.username ? (
