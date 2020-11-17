@@ -1,7 +1,7 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
 
-const User = ({ users }) => {
+const UserDetail = ({ users }) => {
   const { id } = useParams()
   console.log(id)
   const user = users.find(u => u.id === id)
@@ -23,4 +23,4 @@ const User = ({ users }) => {
   )
 }
 
-export default User
+export default UserDetail

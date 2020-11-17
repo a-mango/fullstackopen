@@ -3,7 +3,7 @@ import { Route, Switch, useRouteMatch } from 'react-router-dom'
 import useResource from 'Hooks/use-resource'
 import { apiUrl } from 'Utilities/common'
 import UserList from 'Components/UsersView/UserList'
-import User from 'Components/UsersView/User'
+import UserDetail from 'Components/UsersView/UserDetail'
 
 const UsersView = () => {
   const [users] = useResource(`${apiUrl}/users`)
@@ -14,7 +14,7 @@ const UsersView = () => {
     <div>
       <Switch>
         <Route path={`${match.path}/:id`}>
-          <User users={users} />
+          <UserDetail users={users} />
         </Route>
         <Route path={match.path}>
           <UserList users={users} />
