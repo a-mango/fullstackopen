@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import LogoutForm from 'Components/LogoutForm'
 
 const Nav = () => {
   const style = { padding: '1em' }
@@ -16,6 +17,7 @@ const Nav = () => {
         <Link to="/about" style={style}>
           About
         </Link>
+        <LogoutForm />
       </nav>
     </header>
   )

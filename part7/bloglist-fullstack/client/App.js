@@ -8,7 +8,6 @@ import Notification from 'Components/Notification'
 import Footer from 'Components/Footer'
 import Router from 'Components/Router'
 import LoginForm from 'Components/LoginForm'
-import LogoutForm from 'Components/LogoutForm'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -31,7 +30,7 @@ const App = () => {
     <div>
       <Nav />
       <Notification />
-      {user === null ? <LoginForm /> : <LogoutForm />}
+      {!user && <LoginForm />}
       <Router />
       <Footer />
     </div>
