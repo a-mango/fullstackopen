@@ -1,13 +1,21 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const Nav = () => {
+  const style = { padding: '1em' }
   return (
     <header>
       <h1>Bloglist</h1>
       <nav>
-        <p>Home</p>
-        <p>Blogs</p>
-        <p>About</p>
+        <Link to="/" style={style}>
+          Home
+        </Link>
+        <Link to="/users" style={style}>
+          Users
+        </Link>
+        <Link to="/" style={style}>
+          About
+        </Link>
       </nav>
     </header>
   )
