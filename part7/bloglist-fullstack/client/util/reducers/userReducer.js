@@ -8,18 +8,28 @@ const reducer = (state = null, action) => {
     case SET_USER:
       return action.data
     case CLEAR_USER:
-      return {}
+      return null
     default:
       return state
   }
 }
 
 export const setUser = user => {
+  window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
   blogService.setToken(user.token)
   return async dispatch => {
     dispatch({
       type: SET_USER,
       data: user,
+    })
+  }
+}
+
+export const clearUser = () => {
+  window.localStorage.removeItem('loggedBlogAppUser')
+  return async dispatch => {
+    dispatch({
+      type: CLEAR_USER,
     })
   }
 }
