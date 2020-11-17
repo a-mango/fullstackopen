@@ -66,9 +66,9 @@ blogsRouter.post('/:id/comments', async (request, response) => {
 
   const savedComment = await comment.save()
   blog.comments = blog.comments.concat(savedComment)
-  await blog.save()
+  const savedBlog = await blog.save()
 
-  response.status(201).json(savedComment)
+  response.status(201).json(savedBlog)
 })
 
 /**
