@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
 import { updateBlog, deleteBlog } from 'Utilities/reducers/blogReducer'
+import { setNotification } from 'Utilities/reducers/notificationReducer'
 
 const Blog = ({ blog }) => {
   const dispatch = useDispatch()
@@ -12,29 +13,47 @@ const Blog = ({ blog }) => {
 
   const addLike = () => {
     try {
-
       dispatch(
         updateBlog({
           ...blog,
           likes: blog.likes + 1,
           user: blog.user.id,
         })
-        )
-        // Raise notification
-
-      } catch(exception) {
-        // Raise notification
-      }
+      )
+      dispatch(
+        setNotification({
+          type: 'success',
+          message: `A like was added to "${blog.title}"`,
+        })
+      )
+    } catch (exception) {
+      dispatch(
+        setNotification({
+          type: 'error',
+          message: 'An error has occured while updating the blog',
+        })
+      )
+    }
   }
 
   const removeBlog = () => {
     try {
       if (window.confirm(`Do you really wish to delete blog ${blog.title} ?`)) {
         dispatch(deleteBlog(blog.id))
+        dispatch(
+          setNotification({
+            type: 'success',
+            message: `The blog "${blog.title}" was successfuly deleted`,
+          })
+        )
       }
-        // Raise notification
     } catch (exception) {
-      // Raise notification
+      dispatch(
+        setNotification({
+          type: 'success',
+          message: 'An error has occured while deleting the blog',
+        })
+      )
     }
   }
 
