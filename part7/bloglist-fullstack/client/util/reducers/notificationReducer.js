@@ -6,7 +6,7 @@ let timeoutId
 const reducer = (state = '', action) => {
   switch (action.type) {
     case SET_NOTIFICATION:
-      return action.message
+      return action.data
     case CLEAR_NOTIFICATION:
       return ''
     default:
@@ -14,16 +14,20 @@ const reducer = (state = '', action) => {
   }
 }
 
-export const setNotification = (message, timeout) => {
+export const setNotification = (data, timeout = 10) => {
   return async dispatch => {
-    window.clearTimeout(timeoutId)
+    if (timeoutId) {
+      window.clearTimeout(timeoutId)
+    }
+
     timeoutId = window.setTimeout(
       () => dispatch(clearNotification()),
       timeout * 1000
     )
+
     dispatch({
       type: SET_NOTIFICATION,
-      message,
+      data,
     })
   }
 }
