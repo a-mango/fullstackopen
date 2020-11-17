@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { initializeBlogs } from 'Utilities/reducers/blogReducer'
 import { setNotification } from 'Utilities/reducers/notificationReducer'
@@ -6,7 +6,6 @@ import { setNotification } from 'Utilities/reducers/notificationReducer'
 import Nav from 'Components/Nav'
 import Footer from 'Components/Footer'
 import Notification from 'Components/Notification'
-import Togglable from 'Components/Togglable'
 import BlogForm from 'Components/BlogView/BlogForm'
 import LoginForm from 'Components/LoginForm'
 import LogoutForm from 'Components/LogoutForm'
@@ -15,7 +14,6 @@ import BlogList from 'Components/BlogView/BlogList'
 const App = () => {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
-  const blogFormRef = useRef()
 
   useEffect(() => {
     try {
@@ -39,9 +37,7 @@ const App = () => {
       ) : (
         <div>
           <LogoutForm />
-          <Togglable buttonLabel="Add blog" ref={blogFormRef}>
-            <BlogForm toggleRef={blogFormRef} />
-          </Togglable>
+          <BlogForm />
           <BlogList />
         </div>
       )}

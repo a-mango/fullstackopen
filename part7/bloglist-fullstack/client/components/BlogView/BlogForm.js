@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { createBlog } from 'Utilities/reducers/blogReducer'
 import { setNotification } from 'Utilities/reducers/notificationReducer'
+import Togglable from 'Components/Togglable'
 
-const BlogForm = ({ toggleRef }) => {
+const BlogForm = () => {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
+  const blogFormRef = useRef()
 
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
@@ -32,7 +34,7 @@ const BlogForm = ({ toggleRef }) => {
       setUrl('')
 
       // Toggle blog form
-      toggleRef.current.toggleVisibility()
+      blogFormRef.current.toggleVisibility()
 
       dispatch(
         setNotification({
@@ -51,7 +53,7 @@ const BlogForm = ({ toggleRef }) => {
   }
 
   return (
-    <div className="BlogForm">
+    <Togglable buttonLabel="Add blog" ref={blogFormRef} className="BlogForm">
       <h2>Add a new blog</h2>
 
       <form id="blog-form" onSubmit={addBlog}>
@@ -91,7 +93,7 @@ const BlogForm = ({ toggleRef }) => {
           </button>
         </fieldset>
       </form>
-    </div>
+    </Togglable>
   )
 }
 
