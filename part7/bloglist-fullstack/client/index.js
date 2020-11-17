@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router-dom'
 import ErrorBoundary from 'Components/ErrorBoundary'
 import store from 'Utilities/store'
 import App from './App'
-import 'Assets/custom.scss'
+import 'Assets/main.css'
 
 const refresh = () =>
   render(

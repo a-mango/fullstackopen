@@ -1,6 +1,6 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const sass = require('sass')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const webpack = require('webpack')
 
 module.exports = (env, argv) => {
@@ -43,22 +43,8 @@ module.exports = (env, argv) => {
           },
         },
         {
-          // Load SCSS & SASS files
-          test: /\.s[ac]ss$/i,
-          use: [
-            // Creates `style` nodes from JS strings
-            'style-loader',
-            // Translates CSS into CommonJS
-            'css-loader',
-            // Compiles Sass to CSS
-            {
-              loader: 'sass-loader',
-              options: {
-                // Prefer `dart-sass`
-                implementation: sass,
-              },
-            },
-          ],
+          test: /\.css$/,
+          use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
         },
         {
           // Load other files
@@ -71,6 +57,10 @@ module.exports = (env, argv) => {
       new webpack.DefinePlugin({
         'process.env.BUILT_AT': JSON.stringify(new Date().toISOString()),
         'process.env.NODE_ENV': JSON.stringify(mode),
+      }),
+      new MiniCssExtractPlugin({
+        filename: '[name].bundle.css',
+        chunkFilename: '[id].css',
       }),
       // Skip the part where we would make a html template
       new HtmlWebpackPlugin({
