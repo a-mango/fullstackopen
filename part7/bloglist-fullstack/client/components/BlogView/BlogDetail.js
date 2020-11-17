@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { updateBlog, deleteBlog } from 'Utilities/reducers/blogReducer'
 import { setNotification } from 'Utilities/reducers/notificationReducer'
+import CommentList from 'Components/BlogView/CommentList'
 
 const BlogDetail = () => {
   const dispatch = useDispatch()
@@ -10,7 +11,7 @@ const BlogDetail = () => {
   const blog = useSelector(state => state.blogs.find(b => b.id === id))
   const user = useSelector(state => state.user)
 
-  if (!blog) {
+  if (!blog || !user) {
     return null
   }
 
@@ -73,6 +74,7 @@ const BlogDetail = () => {
           <button onClick={removeBlog}>Delete</button>
         ) : null}
       </div>
+      <CommentList comments={blog.comments} />
     </div>
   )
 }
