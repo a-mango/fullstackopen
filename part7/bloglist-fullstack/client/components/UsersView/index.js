@@ -12,7 +12,6 @@ const UsersView = () => {
 
   return (
     <div>
-      <h2>Users</h2>
       <Switch>
         <Route path={`${match.path}/:id`}>
           <User users={users} />
