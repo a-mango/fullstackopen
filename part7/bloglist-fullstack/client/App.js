@@ -7,6 +7,7 @@ import Nav from 'Components/Nav'
 import Footer from 'Components/Footer'
 import Notification from 'Components/Notification'
 import BlogView from 'Components/BlogView'
+import UsersView from 'Components/UsersView'
 import LoginForm from 'Components/LoginForm'
 import LogoutForm from 'Components/LogoutForm'
 
@@ -37,6 +38,7 @@ const App = () => {
         <div>
           <LogoutForm />
           <BlogView />
+          <UsersView />
         </div>
       )}
       <Footer />
