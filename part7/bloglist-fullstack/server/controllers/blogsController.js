@@ -54,11 +54,11 @@ blogsRouter.post('/:id/comments', async (request, response) => {
   const id = request.params.id
   const body = request.body
 
-  if (!id || !body.message) {
-    throw new ApplicationError('Blog id and message are required', 400)
+  if (!body.message) {
+    throw new ApplicationError('Field message is required', 400)
   }
 
-  const blog = await Blog.findById(id)
+  const blog = await Blog.findById(id).populate('comments')
   const comment = new Comment({
     blog: blog.id,
     ...body,
@@ -66,9 +66,9 @@ blogsRouter.post('/:id/comments', async (request, response) => {
 
   const savedComment = await comment.save()
   blog.comments = blog.comments.concat(savedComment)
-  const savedBlog = await blog.save()
+  await blog.save()
 
-  response.status(201).json(savedBlog)
+  response.status(201).json(blog)
 })
 
 /**
