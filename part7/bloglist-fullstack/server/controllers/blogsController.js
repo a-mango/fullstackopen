@@ -3,6 +3,31 @@ const blogsRouter = require('express').Router()
 const jwt = require('jsonwebtoken')
 const Blog = require('@models/blogModel')
 const User = require('@models/userModel')
+const Comment = require('@models/commentModel')
+
+/**
+ * Blog api comment post route
+ */
+blogsRouter.post('/:id/comments', async (request, response) => {
+  const id = request.params.id
+  const body = request.body
+
+  if(!id || !body.message) {
+    throw new ApplicationError('Blog id and message are required', 400)
+  }
+
+  const blog = await Blog.findById(id)
+  const comment = new Comment({
+    blog: blog.id,
+    ...body
+  })
+
+  const savedComment = await comment.save()
+  blog.comments = blog.comments.concat(savedComment)
+  await blog.save()
+
+  response.status(201).json(savedComment)
+})
 
 /**
  * Blog api get route
