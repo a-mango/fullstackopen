@@ -1,30 +1,27 @@
 import React from 'react'
-import useResource from 'Hooks/use-resource'
-import { apiUrl } from 'Utilities/common'
+import { Link } from 'react-router-dom'
 
-const UserList = () => {
-  const [users, userService] = useResource(`${apiUrl}/users`)
-  console.log(users)
-  return (
-    <div>
-      <table>
-        <thead>
-          <tr>
-            <th>Username</th>
-            <th>Blogs created</th>
+const UserList = ({ users }) => (
+  <div>
+    <table>
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Blogs created</th>
+        </tr>
+      </thead>
+      <tbody>
+        {users.map(user => (
+          <tr key={user.username}>
+            <td>
+              <Link to={`users/${user.id}`}>{user.username}</Link>
+            </td>
+            <td>{user.blogs.length}</td>
           </tr>
-        </thead>
-        <tbody>
-          {users.map(user => (
-            <tr>
-              <td>{user.username}</td>
-              <td>{user.blogs.length}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  )
-}
+        ))}
+      </tbody>
+    </table>
+  </div>
+)
 
 export default UserList
