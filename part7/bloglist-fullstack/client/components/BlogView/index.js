@@ -8,18 +8,16 @@ const BlogView = () => {
   const match = useRouteMatch()
 
   return (
-    <div>
-      <Switch>
-        <Route path={`${match.path}blogs/:id`}>
-          <BlogDetail />
-        </Route>
-        <Route path={match.path}>
-          <h2>Blogs</h2>
-          <BlogForm />
-          <BlogList />
-        </Route>
-      </Switch>
-    </div>
+    <Switch>
+      <Route path={`${match.path}blogs/:id`}>
+        <BlogDetail />
+      </Route>
+      <Route path={match.path}>
+        <h2>Blogs</h2>
+        <BlogForm />
+        <BlogList />
+      </Route>
+    </Switch>
   )
 }
 

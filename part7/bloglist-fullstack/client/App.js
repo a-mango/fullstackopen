@@ -27,11 +27,13 @@ const App = () => {
   }, [dispatch])
 
   return (
-    <div>
+    <div className="bg-gray-100 flex flex-col h-screen justify-between">
       <Nav />
-      <Notification />
-      {!user && <LoginForm />}
-      <Router />
+      <div className="px-20 py-6 flex-grow">
+        <Notification />
+        {!user && <LoginForm />}
+        <Router />
+      </div>
       <Footer />
     </div>
   )
