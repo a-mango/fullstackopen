@@ -38,6 +38,8 @@ blogsRouter.post('/', async (request, response) => {
     user: user.id,
     ...body,
   })
+    .populate('user', { username: 1, name: 1 })
+    .populate('comments')
 
   const savedBlog = await blog.save()
 
@@ -58,7 +60,10 @@ blogsRouter.post('/:id/comments', async (request, response) => {
     throw new ApplicationError('Field message is required', 400)
   }
 
-  const blog = await Blog.findById(id).populate('comments')
+  const blog = await Blog.findById(id)
+    .populate('user', { username: 1, name: 1 })
+    .populate('comments')
+
   const comment = new Comment({
     blog: blog.id,
     ...body,
@@ -114,6 +119,8 @@ blogsRouter.put('/:id', async (request, response) => {
   const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
     new: true,
   })
+    .populate('user', { username: 1, name: 1 })
+    .populate('comments')
 
   response.json(updatedBlog)
 })
