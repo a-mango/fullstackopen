@@ -10,7 +10,7 @@ const UserDetail = ({ users }) => {
   }
 
   return (
-    <div>
+    <div className="spacing w-full">
       <h2>{user.username}</h2>
       <h3>Added blogs:</h3>
       <ul>

@@ -2,7 +2,7 @@ import React from 'react'
 
 const Footer = () => {
   return (
-    <footer>
+    <footer className="h-12 bg-blue-200 flex items-center justify-center">
       <p>
         Created for{' '}
         <a href="https://fullstackopen.com/en/">Fullstackopen 2020</a> by{' '}

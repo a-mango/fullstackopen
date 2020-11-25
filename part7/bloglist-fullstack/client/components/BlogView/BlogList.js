@@ -6,7 +6,7 @@ const BlogList = () => {
   const blogs = useSelector(state => state.blogs)
 
   return (
-    <div className="">
+    <div className="spacing w-full">
       <h2>Saved blogs</h2>
       <ul>
         {blogs &&

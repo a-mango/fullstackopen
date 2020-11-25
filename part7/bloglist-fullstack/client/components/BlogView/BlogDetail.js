@@ -12,7 +12,7 @@ const BlogDetail = () => {
   const blog = useSelector(state => state.blogs.find(b => b.id === id))
   const user = useSelector(state => state.user)
 
-  if (!blog || !user) {
+  if (!blog) {
     return null
   }
 
@@ -22,7 +22,6 @@ const BlogDetail = () => {
         updateBlog({
           ...blog,
           likes: blog.likes + 1,
-          user: blog.user.id,
         })
       )
       dispatch(
@@ -71,7 +70,7 @@ const BlogDetail = () => {
       <p>{blog.likes} likes</p>
       <div>
         <button onClick={addLike}>Like</button>
-        {blog.user.username === user.username ? (
+        {user && blog.user.username === user.username ? (
           <button onClick={removeBlog}>Delete</button>
         ) : null}
       </div>

@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react'
+import React, { useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { createBlog } from 'Utilities/reducers/blogReducer'
 import { setNotification } from 'Utilities/reducers/notificationReducer'
+import useField from 'Hooks/use-field'
 import Togglable from 'Components/Togglable'
 
 const BlogForm = () => {
@@ -9,29 +10,26 @@ const BlogForm = () => {
   const user = useSelector(state => state.user)
   const blogFormRef = useRef()
 
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+  const title = useField('text')
+  const author = useField('text')
+  const url = useField('text')
 
   const addBlog = event => {
     event.preventDefault()
 
     try {
-      dispatch(
-        createBlog(
-          {
-            title,
-            author,
-            url,
-          },
-          user
-        )
-      )
+      const blog = {
+        title: title.value,
+        author: author.value,
+        url: url.value,
+      }
+
+      dispatch(createBlog(blog, user))
 
       // Reset form state
-      setTitle('')
-      setAuthor('')
-      setUrl('')
+      title.reset()
+      author.reset()
+      url.reset()
 
       // Toggle blog form
       blogFormRef.current.toggleVisibility()
@@ -53,45 +51,40 @@ const BlogForm = () => {
   }
 
   return (
-    <Togglable buttonLabel="Add blog" ref={blogFormRef} className="BlogForm">
-      <h2>Add a new blog</h2>
+    <Togglable buttonLabel="Add blog" ref={blogFormRef}>
+      <h3 className="text-lg mb-4">Add a new blog</h3>
 
-      <form id="blog-form" onSubmit={addBlog}>
-        <fieldset>
-          <div>
-            <label htmlFor="blog-title">Title:</label>
-            <input
-              id="blog-title"
-              type="text"
-              value={title}
-              name="title"
-              onChange={({ target }) => setTitle(target.value)}
-            />
-          </div>
-          <div>
-            <label htmlFor="blog-author">Author:</label>
-            <input
-              id="blog-author"
-              type="text"
-              value={author}
-              name="author"
-              onChange={({ target }) => setAuthor(target.value)}
-            />
-          </div>
-          <div>
-            <label htmlFor="blog-url">Url:</label>
-            <input
-              id="blog-url"
-              type="text"
-              value={url}
-              name="url"
-              onChange={({ target }) => setUrl(target.value)}
-            />
-          </div>
-          <button id="blog-submit" type="submit">
-            Add blog
-          </button>
-        </fieldset>
+      <form onSubmit={addBlog}>
+        <label className="block">
+          <span className="">Title</span>
+          <input
+            className="form-input my-1 block w-full"
+            placeholder="Insert blog title"
+            {...title}
+            reset=""
+          />
+        </label>
+        <label className="block">
+          <span className="">Author</span>
+          <input
+            className="form-input my-1 block w-full"
+            placeholder="Jane Doe"
+            {...author}
+            reset=""
+          />
+        </label>
+        <label className="block">
+          <span className="">Url</span>
+          <input
+            className="form-input my-1 block w-full"
+            placeholder="https://example.com"
+            {...url}
+            reset=""
+          />
+        </label>
+        <button type="submit" className="button my-2">
+          Add blog
+        </button>
       </form>
     </Togglable>
   )

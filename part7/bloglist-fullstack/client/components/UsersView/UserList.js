@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 const UserList = ({ users }) => (
-  <div>
+  <div className="spacing w-full">
     <h2>Users</h2>
     <table className="table-auto">
       <thead>

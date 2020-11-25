@@ -2,7 +2,7 @@ import React from 'react'
 
 const AboutView = () => {
   return (
-    <div>
+    <div className="spacing">
       <h2>About</h2>
       <p>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Eveniet rerum

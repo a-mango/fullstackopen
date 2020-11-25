@@ -13,9 +13,8 @@ const BlogView = () => {
         <BlogDetail />
       </Route>
       <Route path={match.path}>
-        <h2>Blogs</h2>
-        <BlogForm />
         <BlogList />
+        <BlogForm />
       </Route>
     </Switch>
   )

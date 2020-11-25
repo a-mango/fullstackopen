@@ -29,7 +29,7 @@ const App = () => {
   return (
     <div className="bg-gray-100 flex flex-col h-screen justify-between">
       <Nav />
-      <div className="px-20 py-6 flex-grow">
+      <div className="mx-6 md:mx-32 py-6 flex-grow">
         <Notification />
         {!user && <LoginForm />}
         <Router />

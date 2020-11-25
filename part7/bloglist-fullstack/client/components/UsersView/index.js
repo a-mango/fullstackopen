@@ -11,16 +11,14 @@ const UsersView = () => {
   const match = useRouteMatch()
 
   return (
-    <div>
-      <Switch>
-        <Route path={`${match.path}/:id`}>
-          <UserDetail users={users} />
-        </Route>
-        <Route path={match.path}>
-          <UserList users={users} />
-        </Route>
-      </Switch>
-    </div>
+    <Switch>
+      <Route path={`${match.path}/:id`}>
+        <UserDetail users={users} />
+      </Route>
+      <Route path={match.path}>
+        <UserList users={users} />
+      </Route>
+    </Switch>
   )
 }
 
