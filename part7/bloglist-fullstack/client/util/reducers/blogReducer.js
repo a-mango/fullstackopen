@@ -107,7 +107,6 @@ export const updateBlog = blog => {
         ...blog,
       }
       const updatedBlog = await blogService.update(blog.id, blogToUpdate)
-      console.log(updatedBlog)
       dispatch({
         type: UPDATE_BLOG,
         data: updatedBlog,
