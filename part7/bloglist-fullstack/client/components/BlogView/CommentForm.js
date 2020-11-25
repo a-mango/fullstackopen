@@ -14,10 +14,17 @@ const CommentForm = ({ blog }) => {
   }
 
   return (
-    <div>
+    <div className="my-4">
+      <h3>Add a comment</h3>
       <form onSubmit={addComment}>
-        <input {...message} reset={null} />
-        <button type="submit">Add comment</button>
+        <input
+          {...message}
+          reset={null}
+          className="shadow rounded border px-1"
+        />
+        <button type="submit" className="button ml-2">
+          Add
+        </button>
       </form>
     </div>
   )

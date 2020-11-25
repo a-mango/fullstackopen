@@ -1,7 +1,6 @@
 import React, { useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { createBlog } from 'Utilities/reducers/blogReducer'
-import { setNotification } from 'Utilities/reducers/notificationReducer'
 import useField from 'Hooks/use-field'
 import Togglable from 'Components/Togglable'
 
@@ -17,37 +16,21 @@ const BlogForm = () => {
   const addBlog = event => {
     event.preventDefault()
 
-    try {
-      const blog = {
-        title: title.value,
-        author: author.value,
-        url: url.value,
-      }
-
-      dispatch(createBlog(blog, user))
-
-      // Reset form state
-      title.reset()
-      author.reset()
-      url.reset()
-
-      // Toggle blog form
-      blogFormRef.current.toggleVisibility()
-
-      dispatch(
-        setNotification({
-          type: 'success',
-          message: 'A new blog was successfuly added to the database',
-        })
-      )
-    } catch (exception) {
-      dispatch(
-        setNotification({
-          type: 'error',
-          message: 'An error has occured while adding the blog to the database',
-        })
-      )
+    const blog = {
+      title: title.value,
+      author: author.value,
+      url: url.value,
     }
+
+    dispatch(createBlog(blog, user))
+
+    // Reset form state
+    title.reset()
+    author.reset()
+    url.reset()
+
+    // Toggle blog form
+    blogFormRef.current.toggleVisibility()
   }
 
   return (
