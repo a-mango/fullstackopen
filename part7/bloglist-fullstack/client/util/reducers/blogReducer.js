@@ -1,4 +1,5 @@
 import blogService from 'Utilities/services/blogs'
+import { setNotification } from 'Utilities/reducers/notificationReducer'
 
 const INIT_BLOGS = 'INIT_BLOGS'
 const ADD_BLOG = 'ADD_BLOG'
@@ -24,62 +25,132 @@ const reducer = (state = [], action) => {
 
 export const initializeBlogs = () => {
   return async dispatch => {
-    const blogs = await blogService.getAll()
-    dispatch({
-      type: INIT_BLOGS,
-      data: blogs,
-    })
+    try {
+      const blogs = await blogService.getAll()
+      dispatch({
+        type: INIT_BLOGS,
+        data: blogs,
+      })
+    } catch {
+      dispatch(
+        setNotification({
+          type: 'error',
+          message: 'There was an error while fetching the data',
+        })
+      )
+    }
   }
 }
 
 export const createBlog = (content, user) => {
   return async dispatch => {
-    const returnedBlog = await blogService.create(content)
-    const newBlog = {
-      ...returnedBlog,
-      user: {
-        username: user.username,
-      },
+    try {
+      const returnedBlog = await blogService.create(content)
+      const newBlog = {
+        ...returnedBlog,
+        user: {
+          username: user.username,
+        },
+      }
+      dispatch({
+        type: ADD_BLOG,
+        data: newBlog,
+      })
+      dispatch(
+        setNotification({
+          type: 'success',
+          message: `The blog "${newBlog.title}" was saved`,
+        })
+      )
+    } catch {
+      dispatch(
+        setNotification({
+          type: 'error',
+          message: 'There was an error while saving the blog',
+        })
+      )
     }
-    dispatch({
-      type: ADD_BLOG,
-      data: newBlog,
-    })
   }
 }
 
-export const deleteBlog = id => {
+export const deleteBlog = blog => {
   return async dispatch => {
-    await blogService.remove(id)
-    dispatch({
-      type: DELETE_BLOG,
-      data: {
-        id,
-      },
-    })
+    try {
+      await blogService.remove(blog.id)
+      dispatch({
+        type: DELETE_BLOG,
+        data: {
+          id: blog.id,
+        },
+      })
+      dispatch(
+        setNotification({
+          type: 'success',
+          message: `The blog "${blog.title}" was deleted`,
+        })
+      )
+    } catch {
+      dispatch(
+        setNotification({
+          type: 'error',
+          message: 'There was an error while deleting the blog',
+        })
+      )
+    }
   }
 }
 
 export const updateBlog = blog => {
   return async dispatch => {
-    const blogToUpdate = {
-      ...blog,
+    try {
+      const blogToUpdate = {
+        ...blog,
+      }
+      const updatedBlog = await blogService.update(blog.id, blogToUpdate)
+      console.log(updatedBlog)
+      dispatch({
+        type: UPDATE_BLOG,
+        data: updatedBlog,
+      })
+      dispatch(
+        setNotification({
+          type: 'success',
+          message: `The blog "${blog.title}" was updated`,
+        })
+      )
+    } catch {
+      dispatch(
+        setNotification({
+          type: 'error',
+          message: 'There was an error while updating the blog',
+        })
+      )
     }
-    const updatedBlog = await blogService.update(blog.id, blogToUpdate)
-    dispatch({
-      type: UPDATE_BLOG,
-      data: updatedBlog,
-    })
   }
 }
 
 export const createComment = (blog, message) => {
   return async dispatch => {
-    const updatedBlog = await blogService.createComment(blog.id, message)
-    dispatch({
-      type: UPDATE_BLOG,
-      data: updatedBlog,
-    })
+    try {
+      const updatedBlog = await blogService.createComment(blog.id, message)
+      dispatch({
+        type: UPDATE_BLOG,
+        data: updatedBlog,
+      })
+      dispatch(
+        setNotification({
+          type: 'success',
+          message: `The comment "${message}" was added`,
+        })
+      )
+    } catch {
+      dispatch(
+        setNotification({
+          type: 'error',
+          message: 'There was an error while adding the comment',
+        })
+      )
+    }
   }
 }
 
