@@ -15,6 +15,9 @@
   a {
     @apply text-blue-800 underline;
   }
+  input {
+    @apply shadow rounded border px-1 text-blue-700;
+  }
 }
 
 @layer components {

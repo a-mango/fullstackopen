@@ -20,7 +20,7 @@ const CommentForm = ({ blog }) => {
         <input
           {...message}
           reset={null}
-          className="shadow rounded border px-1"
+          className=""
         />
         <button type="submit" className="button ml-2">
           Add

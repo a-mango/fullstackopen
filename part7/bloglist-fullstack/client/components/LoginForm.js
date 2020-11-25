@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+import useField from 'Hooks/use-field'
 import { setUser } from 'Utilities/reducers/userReducer'
 import { setNotification } from 'Utilities/reducers/notificationReducer'
-import loginService from 'Utilities/services/login'
 
 const LoginForm = () => {
   const dispatch = useDispatch()
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const username = useField('text')
+  const password = useField('password')
+  // const [username, setUsername] = useState('')
+  // const [password, setPassword] = useState('')
 
   useEffect(() => {
     const loggedUserJson = window.localStorage.getItem('loggedBlogAppUser')
@@ -23,58 +25,26 @@ const LoginForm = () => {
     }
   }, [dispatch])
 
-  const handleLogin = async event => {
+  const handleLogin = event => {
     event.preventDefault()
-
-    try {
-      const user = await loginService.login({ username, password })
-
-      dispatch(setUser(user))
-      setUsername('')
-      setPassword('')
-
-      dispatch(
-        setNotification({
-          type: 'success',
-          message: `Successfully logged in as ${username}`,
-        })
-      )
-    } catch (exception) {
-      dispatch(
-        setNotification({
-          type: 'error',
-          message: `An error has occured while attempting to log in`,
-        })
-      )
-    }
+    dispatch(
+      setUser({
+        username: username.value,
+        password: password.value,
+      })
+    )
+    username.reset()
+    password.reset()
   }
 
   return (
-    <div>
+    <div className="spacing">
       <h2>Log in to the application</h2>
 
-      <form id="login-form" onSubmit={handleLogin}>
-        <div>
-          <label htmlFor="username">Username:</label>
-          <input
-            id="login-username"
-            type="text"
-            value={username}
-            name="username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            id="login-password"
-            type="password"
-            value={password}
-            name="password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button id="login-submit" type="submit">
+      <form onSubmit={handleLogin}>
+        <input placeholder="Username" {...username} reset="" className="mr-2" />
+        <input placeholder="Password" {...password} reset="" className="mr-2" />
+        <button type="submit" className="button">
           Login
         </button>
       </form>

@@ -7,6 +7,11 @@ import Togglable from 'Components/Togglable'
 const BlogForm = () => {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
+
+  if (!user) {
+    return null
+  }
+
   const blogFormRef = useRef()
 
   const title = useField('text')
