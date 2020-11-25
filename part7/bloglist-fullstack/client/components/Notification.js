@@ -20,7 +20,7 @@ const Notification = () => {
   }
   return (
     <div
-      className={`py-2 px-2 mb-4 rounded-sm shadow transition duration-500 ease-in-out h-34 text-white ${color()}`}
+      className={`py-2 px-2 mb-4 rounded-sm shadow h-34 text-white ${color()}`}
     >
       {message}
     </div>
