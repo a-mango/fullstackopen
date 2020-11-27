@@ -16,7 +16,6 @@ const BlogForm = () => {
     return null
   }
 
-
   const addBlog = event => {
     event.preventDefault()
 

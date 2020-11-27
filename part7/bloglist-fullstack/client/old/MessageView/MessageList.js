@@ -3,13 +3,13 @@ import React from 'react'
 const MessageList = ({ messages, deleteMessage }) => {
   if (!messages) return null
 
-  const handleDelete = (message) => () => {
+  const handleDelete = message => () => {
     deleteMessage(message)
   }
 
   return (
     <ul>
-      {messages.map((message) => (
+      {messages.map(message => (
         <li key={message.id}>
           {message.body}
           <button type="button" onClick={handleDelete(message)}>
@@ -20,6 +20,5 @@ const MessageList = ({ messages, deleteMessage }) => {
     </ul>
   )
 }
-
 
 export default MessageList

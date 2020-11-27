@@ -17,11 +17,7 @@ const CommentForm = ({ blog }) => {
     <div className="my-4">
       <h3>Add a comment</h3>
       <form onSubmit={addComment}>
-        <input
-          {...message}
-          reset={null}
-          className=""
-        />
+        <input {...message} reset={null} className="" />
         <button type="submit" className="button ml-2">
           Add
         </button>

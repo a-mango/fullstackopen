@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { getMessages, postMessage, deleteMessage } from 'Utilities/services/messages'
+import {
+  getMessages,
+  postMessage,
+  deleteMessage,
+} from 'Utilities/services/messages'
 
 import MessageForm from 'Components/MessageView/MessageForm'
 import MessageList from 'Components/MessageView/MessageList'
@@ -16,12 +20,12 @@ const MessageView = () => {
     handleGetMessages()
   }, [])
 
-  const handlePostMessage = async (newMessage) => {
+  const handlePostMessage = async newMessage => {
     await postMessage(newMessage)
     handleGetMessages()
   }
 
-  const handleDeleteMessage = async (message) => {
+  const handleDeleteMessage = async message => {
     await deleteMessage(message)
     handleGetMessages()
   }

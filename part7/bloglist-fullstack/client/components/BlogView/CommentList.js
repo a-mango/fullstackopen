@@ -8,7 +8,11 @@ const CommentList = ({ comments }) => {
         {comments === null ? (
           <p>No comments available for this post</p>
         ) : (
-          comments.map(comment => <li key={comment.id} className="block">{comment.message}</li>)
+          comments.map(comment => (
+            <li key={comment.id} className="block">
+              {comment.message}
+            </li>
+          ))
         )}
       </ul>
     </div>

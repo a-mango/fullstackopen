@@ -1,28 +1,28 @@
 var _ = require('lodash')
 
 // eslint-disable-next-line no-unused-vars
-const dummy = (blogs) => {
+const dummy = blogs => {
   return 1
 }
 
-const totalLikes = (blogs) => {
+const totalLikes = blogs => {
   return blogs.reduce((sum, blog) => sum + blog.likes, 0)
 }
 
-const favoriteBlog = (blogs) => {
+const favoriteBlog = blogs => {
   if (blogs.length === 0) return null
 
   let blogWithMostLikes = blogs[0]
 
   // Iterate through the blogs array to find the maximum blog.likes value
-  blogs.forEach((blog) => {
+  blogs.forEach(blog => {
     blog.likes > blogWithMostLikes.likes ? (blogWithMostLikes = blog) : false
   })
 
   return blogWithMostLikes
 }
 
-const mostBlogs = (blogs) => {
+const mostBlogs = blogs => {
   if (blogs.length === 0) return null
 
   // Pass the blogs array to the lodash constructor
@@ -38,7 +38,7 @@ const mostBlogs = (blogs) => {
   return authorWithMostBlogs
 }
 
-const mostLikes = (blogs) => {
+const mostLikes = blogs => {
   if (blogs.length === 0) return null
 
   const blogsByAuthor = _(blogs)
