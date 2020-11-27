@@ -12,14 +12,20 @@ const UserDetail = ({ users }) => {
   return (
     <div className="spacing w-full">
       <h2>{user.username}</h2>
-      <h3>Added blogs:</h3>
-      <ul>
-        {user.blogs.map(blog => (
-          <li key={blog.title}>
-            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-          </li>
-        ))}
-      </ul>
+      {user.blogs.length === 0 ? (
+        <h3>No blogs found.</h3>
+      ) : (
+        <div>
+          <h3>Added blogs:</h3>
+          <ul>
+            {user.blogs.map(blog => (
+              <li key={blog.title}>
+                <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   )
 }
