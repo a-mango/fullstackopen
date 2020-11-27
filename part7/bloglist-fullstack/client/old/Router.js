@@ -4,7 +4,7 @@ import { Route, Switch } from 'react-router-dom'
 import FrontPage from 'Components/FrontPage'
 import MessageView from 'Components/MessageView'
 
-export default () => (
+const Router = () => (
   <div className="content">
     <Switch>
       <Route exact path="/" component={FrontPage} />
@@ -12,3 +12,5 @@ export default () => (
     </Switch>
   </div>
 )
+
+export default Router
