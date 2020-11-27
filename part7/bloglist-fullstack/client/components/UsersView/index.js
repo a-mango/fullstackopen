@@ -7,12 +7,11 @@ import UserDetail from 'Components/UsersView/UserDetail'
 
 const UsersView = () => {
   const [users] = useResource(`${apiUrl}/users`)
-
   const match = useRouteMatch()
 
   return (
     <Switch>
-      <Route path={`${match.path}/:id`}>
+      <Route path={`${match.path}/:username`}>
         <UserDetail users={users} />
       </Route>
       <Route path={match.path}>

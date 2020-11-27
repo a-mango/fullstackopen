@@ -2,8 +2,8 @@ import React from 'react'
 import { Link, useParams } from 'react-router-dom'
 
 const UserDetail = ({ users }) => {
-  const { id } = useParams()
-  const user = users.find(u => u.id === id)
+  const { username } = useParams()
+  const user = users.find(u => u.username === username)
 
   if (!user) {
     return null

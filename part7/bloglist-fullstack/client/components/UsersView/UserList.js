@@ -19,7 +19,7 @@ const UserList = ({ users }) => (
               className={i % 2 === 0 ? 'bg-blue-100' : null}
             >
               <td className="border px-4 py-2">
-                <Link to={`users/${user.id}`}>{user.username}</Link>
+                <Link to={`users/${user.username}`}>{user.username}</Link>
               </td>
               <td className="border px-4 py-2">{user.blogs.length}</td>
             </tr>
