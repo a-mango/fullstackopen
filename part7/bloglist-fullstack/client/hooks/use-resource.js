@@ -22,7 +22,7 @@ const useResource = baseUrl => {
   }
 
   const get = async id => {
-    const response = await axios.get(`${baseUrl}/${id}`, resource, headers)
+    const response = await axios.get(`${baseUrl}/${id}`, headers)
     return response.data
   }
 
