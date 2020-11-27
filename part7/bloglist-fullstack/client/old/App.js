@@ -3,10 +3,12 @@ import NavBar from 'Components/NavBar'
 import Footer from 'Components/Footer'
 import Router from 'Components/Router'
 
-export default () => (
+const App = () => (
   <>
     <NavBar />
     <Router />
     <Footer />
   </>
 )
+
+export default App
