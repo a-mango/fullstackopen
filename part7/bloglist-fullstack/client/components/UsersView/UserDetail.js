@@ -1,5 +1,5 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 const UserDetail = ({ users }) => {
   const { id } = useParams()
@@ -15,7 +15,9 @@ const UserDetail = ({ users }) => {
       <h3>Added blogs:</h3>
       <ul>
         {user.blogs.map(blog => (
-          <li key={blog.title}>{blog.title}</li>
+          <li key={blog.title}>
+            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+          </li>
         ))}
       </ul>
     </div>
