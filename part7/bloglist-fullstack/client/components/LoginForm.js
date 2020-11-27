@@ -8,8 +8,6 @@ const LoginForm = () => {
   const dispatch = useDispatch()
   const username = useField('text')
   const password = useField('password')
-  // const [username, setUsername] = useState('')
-  // const [password, setPassword] = useState('')
 
   useEffect(() => {
     const loggedUserJson = window.localStorage.getItem('loggedBlogAppUser')
@@ -40,7 +38,6 @@ const LoginForm = () => {
   return (
     <div className="spacing">
       <h2>Log in to the application</h2>
-
       <form onSubmit={handleLogin}>
         <input placeholder="Username" {...username} reset="" className="mr-2" />
         <input placeholder="Password" {...password} reset="" className="mr-2" />
