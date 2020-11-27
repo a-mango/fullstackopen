@@ -16,11 +16,10 @@ const reducer = (state = null, action) => {
   }
 }
 
-export const setUser = ({ username, password }) => {
+export const loginUser = credentials => {
   return async dispatch => {
     try {
-      const user = await loginService.login({ username, password })
-
+      const user = await loginService.login(credentials)
       window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
       blogService.setToken(user.token)
       dispatch({
@@ -41,6 +40,17 @@ export const setUser = ({ username, password }) => {
         })
       )
     }
+  }
+}
+
+export const setUser = user => {
+  return async dispatch => {
+    window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
+    blogService.setToken(user.token)
+    dispatch({
+      type: SET_USER,
+      data: user,
+    })
   }
 }
 

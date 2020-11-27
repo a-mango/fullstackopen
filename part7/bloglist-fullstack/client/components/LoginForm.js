@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import useField from 'Hooks/use-field'
-import { setUser } from 'Utilities/reducers/userReducer'
+import { setUser, loginUser } from 'Utilities/reducers/userReducer'
 import { setNotification } from 'Utilities/reducers/notificationReducer'
 
 const LoginForm = () => {
@@ -28,7 +28,7 @@ const LoginForm = () => {
   const handleLogin = event => {
     event.preventDefault()
     dispatch(
-      setUser({
+      loginUser({
         username: username.value,
         password: password.value,
       })

@@ -7,16 +7,15 @@ import Togglable from 'Components/Togglable'
 const BlogForm = () => {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
+  const title = useField('text')
+  const author = useField('text')
+  const url = useField('text')
+  const blogFormRef = useRef()
 
   if (!user) {
     return null
   }
 
-  const blogFormRef = useRef()
-
-  const title = useField('text')
-  const author = useField('text')
-  const url = useField('text')
 
   const addBlog = event => {
     event.preventDefault()
