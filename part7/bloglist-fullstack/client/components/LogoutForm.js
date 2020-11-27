@@ -7,7 +7,7 @@ import { setNotification } from 'Utilities/reducers/notificationReducer'
 const LogoutForm = () => {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
-  console.log(user)
+
   if (!user) {
     return null
   }
