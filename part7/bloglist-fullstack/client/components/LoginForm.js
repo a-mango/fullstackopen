@@ -6,8 +6,8 @@ import { setNotification } from 'Utilities/reducers/notificationReducer'
 
 const LoginForm = () => {
   const dispatch = useDispatch()
-  const username = useField('text')
-  const password = useField('password')
+  const { reset: resetUsername, ...username } = useField('text')
+  const { reset: resetPassword, ...password } = useField('password')
 
   useEffect(() => {
     const loggedUserJson = window.localStorage.getItem('loggedBlogAppUser')
@@ -31,16 +31,16 @@ const LoginForm = () => {
         password: password.value,
       })
     )
-    username.reset()
-    password.reset()
+    resetUsername()
+    resetPassword()
   }
 
   return (
     <div className="spacing">
       <h2>Log in to the application</h2>
       <form onSubmit={handleLogin}>
-        <input placeholder="Username" {...username} reset="" className="mr-2" />
-        <input placeholder="Password" {...password} reset="" className="mr-2" />
+        <input placeholder="Username" {...username} className="mr-2" />
+        <input placeholder="Password" {...password} className="mr-2" />
         <button type="submit" className="button">
           Login
         </button>

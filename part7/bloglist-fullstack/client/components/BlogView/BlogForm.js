@@ -7,9 +7,9 @@ import Togglable from 'Components/Togglable'
 const BlogForm = () => {
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
-  const title = useField('text')
-  const author = useField('text')
-  const url = useField('text')
+  const { reset: resetTitle, ...title } = useField('text')
+  const { reset: resetAuthor, ...author } = useField('text')
+  const { reset: resetUrl, ...url } = useField('text')
   const blogFormRef = useRef()
 
   if (!user) {
@@ -28,9 +28,9 @@ const BlogForm = () => {
     dispatch(createBlog(blog, user))
 
     // Reset form state
-    title.reset()
-    author.reset()
-    url.reset()
+    resetTitle()
+    resetAuthor()
+    resetUrl()
 
     // Toggle blog form
     blogFormRef.current.toggleVisibility()
@@ -39,7 +39,6 @@ const BlogForm = () => {
   return (
     <Togglable buttonLabel="Add blog" ref={blogFormRef}>
       <h3 className="text-lg mb-4">Add a new blog</h3>
-
       <form onSubmit={addBlog}>
         <label className="block">
           <span className="">Title</span>
@@ -47,7 +46,6 @@ const BlogForm = () => {
             className="form-input my-1 block w-full"
             placeholder="Insert blog title"
             {...title}
-            reset=""
           />
         </label>
         <label className="block">
@@ -56,7 +54,6 @@ const BlogForm = () => {
             className="form-input my-1 block w-full"
             placeholder="Jane Doe"
             {...author}
-            reset=""
           />
         </label>
         <label className="block">
@@ -65,7 +62,6 @@ const BlogForm = () => {
             className="form-input my-1 block w-full"
             placeholder="https://example.com"
             {...url}
-            reset=""
           />
         </label>
         <button type="submit" className="button my-2">

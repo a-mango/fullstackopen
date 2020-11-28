@@ -5,7 +5,7 @@ import { createComment } from 'Utilities/reducers/blogReducer'
 
 const CommentForm = ({ blog }) => {
   const dispatch = useDispatch()
-  const message = useField('text')
+  const { reset: resetMessage, ...message } = useField('text')
 
   const addComment = event => {
     event.preventDefault()
@@ -17,7 +17,7 @@ const CommentForm = ({ blog }) => {
     <div className="my-4">
       <h3>Add a comment</h3>
       <form onSubmit={addComment}>
-        <input {...message} reset={null} className="" />
+        <input {...message} />
         <button type="submit" className="button ml-2">
           Add
         </button>
