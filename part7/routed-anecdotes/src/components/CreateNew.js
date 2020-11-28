@@ -2,13 +2,9 @@ import React from 'react'
 import { useField } from '../hooks'
 
 const CreateNew = props => {
-  const content = useField('text')
-  const author = useField('text')
-  const info = useField('text')
-  
-  // const [content, setContent] = useState('')
-  // const [author, setAuthor] = useState('')
-  // const [info, setInfo] = useState('')
+  const { reset: resetContent, ...content } = useField('text')
+  const { reset: resetAuthor, ...author } = useField('text')
+  const { reset: resetInfo, ...info } = useField('text')
 
   const handleSubmit = e => {
     e.preventDefault()
@@ -21,9 +17,9 @@ const CreateNew = props => {
   }
 
   const handleReset = () => {
-    content.reset()
-    author.reset()
-    info.reset()
+    resetContent()
+    resetAuthor()
+    resetInfo()
   }
 
   return (
@@ -32,15 +28,15 @@ const CreateNew = props => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input {...content} reset={null} />
+          <input {...content} />
         </div>
         <div>
           author
-          <input {...author} reset={null} />
+          <input {...author} />
         </div>
         <div>
           url for more info
-          <input {...info} reset={null} />
+          <input {...info} />
         </div>
         <button>create</button>
         <input type="reset" onClick={handleReset} value="reset" />
