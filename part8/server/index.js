@@ -155,6 +155,7 @@ const resolvers = {
       if (!authorExists(args.author)) {
         const author = {
           name: args.author,
+          id: uuid(),
         }
         authors = authors.concat(author)
       }
