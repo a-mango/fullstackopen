@@ -23,7 +23,7 @@ const NewBook = props => {
     createBook({
       variables: {
         title,
-        published: Number(published),
+        published: +published,
         author,
         genres,
       },
