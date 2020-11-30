@@ -60,25 +60,37 @@ const resolvers = {
   Query: {
     bookCount: () => Book.collection.countDocuments(),
     authorCount: () => Author.collection.countDocuments(),
-    allBooks: (root, args) => {
-      const byAuthor = book => book.author === args.author
-      const byGenre = book => book.genres.some(genre => genre === args.genre)
+    allBooks: async (root, args) => {
       if (!args.author && !args.genre) {
-        return books
-      } else if (args.author) {
-        return books.filter(byAuthor)
-      } else if (args.genre) {
-        return books.filter(byGenre)
+        return Book.find({}).populate('author')
       }
-      return books.filter(byAuthor && byGenre)
+
+      if (args.genre) {
+        return Book.find({
+          genres: { $in: args.genre },
+        }).populate('author')
+      }
+
+      const author = await Author.findOne({ name: args.author })
+
+      if (args.author) {
+        return Book.find({
+          author: author._id,
+        }).populate('author')
+      }
+
+      return Book.find({
+        author: author._id,
+        genres: { $in: args.genre },
+      }).populate('author')
     },
     allAuthors: (root, args) => {
-      return authors
+      return Author.find({})
     },
   },
   Author: {
     bookCount: root => {
-      return books.filter(b => b.author === root.name).length
+      return Book.countDocuments({})
     },
   },
   Mutation: {
@@ -99,14 +111,18 @@ const resolvers = {
       return book
     },
     editAuthor: (root, args) => {
-      const author = authors.find(a => a.name === args.name)
-      if (!author) {
-        return null
+      const author = Author.findOne({ name: args.name })
+      author.born = args.setBornTo
+
+      try {
+        author.save()
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
       }
 
-      const updatedAuthor = { ...author, born: args.setBornTo }
-      authors = authors.map(a => (a.name === args.name ? updatedAuthor : a))
-      return updatedAuthor
+      return author
     },
   },
 }
@@ -117,5 +133,5 @@ const server = new ApolloServer({
 })
 
 server.listen().then(({ url }) => {
-  console.log(`Server ready at ${url}`)
+  console.log(`🚀 Server ready at ${url}`)
 })
