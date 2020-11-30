@@ -95,7 +95,12 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (root, args) => {
-      const author = new Author({ name: args.author })
+      let author = await Author.findOne({ name: args.author })
+
+      if (!author) {
+        author = new Author({ name: args.author })
+      }
+
       const book = new Book({ ...args })
 
       try {
@@ -110,8 +115,15 @@ const resolvers = {
 
       return book
     },
-    editAuthor: (root, args) => {
-      const author = Author.findOne({ name: args.name })
+    editAuthor: async (root, args) => {
+      const author = await Author.findOne({ name: args.name })
+
+      if (!author) {
+        throw new UserInputError('Author must exist', {
+          invalidArgs: args,
+        })
+      }
+
       author.born = args.setBornTo
 
       try {
