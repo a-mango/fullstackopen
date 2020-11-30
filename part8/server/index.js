@@ -7,7 +7,7 @@ const Author = require('./models/author')
 
 const { MONGODB_URI, JWT_SECRET } = process.env
 
-console.log('Connecting to', MONGODB_URI)
+console.log('⏳ Connecting to', MONGODB_URI)
 mongoose
   .connect(MONGODB_URI, {
     useNewUrlParser: true,
@@ -16,10 +16,10 @@ mongoose
     useCreateIndex: true,
   })
   .then(() => {
-    console.log('Connected to MongoDB')
+    console.log('✅ Connected to MongoDB')
   })
   .catch(error => {
-    console.log('Error connection to MongoDB:', error.message)
+    console.log('❌ Error connection to MongoDB:', error.message)
   })
 
 const typeDefs = gql`
