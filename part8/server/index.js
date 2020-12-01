@@ -1,9 +1,15 @@
 require('dotenv').config()
-const { ApolloServer, UserInputError, gql } = require('apollo-server')
+const {
+  ApolloServer,
+  UserInputError,
+  AuthenticationError,
+  gql,
+} = require('apollo-server')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const Book = require('./models/book')
 const Author = require('./models/author')
+const User = require('./models/user')
 
 const { MONGODB_URI, JWT_SECRET } = process.env
 
@@ -112,6 +118,7 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (root, args, { currentUser }) => {
+      console.log("Adding a book")
       if (!currentUser) {
         throw new AuthenticationError(
           'User must be authenticated to add a book'
@@ -125,7 +132,6 @@ const resolvers = {
       }
 
       const book = new Book({ ...args })
-
       try {
         await author.save()
         book.author = author
@@ -138,7 +144,7 @@ const resolvers = {
 
       return book
     },
-    editAuthor: async (root, args) => {
+    editAuthor: async (root, args, { currentUser }) => {
       if (!currentUser) {
         throw new AuthenticationError(
           'User must be authenticated to edit an author'
@@ -165,17 +171,20 @@ const resolvers = {
 
       return author
     },
-    createUser: async (root, { args }) => {
-      const user = new User({ username: args.username })
+    createUser: async (root, args) => {
+      const user = new User({
+        username: args.username,
+        favoriteGenre: args.favoriteGenre,
+      })
+
       try {
         user.save()
       } catch (error) {
-        if (!args.username || args.favoriteGenre) {
-          throw new UserInputError(error.message, {
-            invalidArgs: args,
-          })
-        }
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
       }
+
       return user
     },
     login: async (root, args) => {
