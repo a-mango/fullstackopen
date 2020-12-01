@@ -30,14 +30,12 @@ const Recommend = props => {
     return <div>loading...</div>
   }
 
-  if(userQuery.data.me === null) {
-    return null
-  }
+
 
   return (
     <div>
       <h2>Recommendations</h2>
-      <p>Books in your favorite genre {userQuery.data.me.favoriteGenre}</p>
+      <p>Books in your favorite genre {userQuery.data.me?.favoriteGenre}</p>
       <BooksTable books={books} />
     </div>
   )
