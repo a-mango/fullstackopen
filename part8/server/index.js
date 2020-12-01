@@ -118,7 +118,6 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (root, args, { currentUser }) => {
-      console.log("Adding a book")
       if (!currentUser) {
         throw new AuthenticationError(
           'User must be authenticated to add a book'
