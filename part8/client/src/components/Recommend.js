@@ -10,9 +10,7 @@ const Recommend = props => {
   const [getBooks, booksQuery] = useLazyQuery(ALL_BOOKS)
 
   useEffect(() => {
-    if (userQuery.data) {
-      console.log(userQuery.data.me.favoriteGenre)
-
+    if (userQuery.data?.me) {
       getBooks({ variables: { genre: userQuery.data.me.favoriteGenre } })
     }
   }, [getBooks, userQuery])
@@ -30,6 +28,10 @@ const Recommend = props => {
 
   if (userQuery.loading || booksQuery.loading) {
     return <div>loading...</div>
+  }
+
+  if(userQuery.data.me === null) {
+    return null
   }
 
   return (
