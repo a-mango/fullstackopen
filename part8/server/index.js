@@ -4,12 +4,14 @@ const {
   UserInputError,
   AuthenticationError,
   gql,
+  PubSub,
 } = require('apollo-server')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const Book = require('./models/book')
 const Author = require('./models/author')
 const User = require('./models/user')
+const pubsub = new PubSub()
 
 const { MONGODB_URI, JWT_SECRET } = process.env
 
@@ -73,6 +75,10 @@ const typeDefs = gql`
     createUser(username: String!, favoriteGenre: String!): User
     login(username: String!, password: String!): Token
   }
+
+  type Subscription {
+    bookAdded: Book!
+  }
 `
 
 const resolvers = {
@@ -80,28 +86,35 @@ const resolvers = {
     bookCount: () => Book.collection.countDocuments(),
     authorCount: () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
-      if (!args.author && !args.genre) {
-        return Book.find({}).populate('author')
-      }
-
-      if (args.genre) {
-        return Book.find({
-          genres: { $in: args.genre },
-        }).populate('author')
-      }
-
+      let books
       const author = await Author.findOne({ name: args.author })
 
-      if (args.author) {
-        return Book.find({
+      if (args.author && args.genre) {
+        // Find books by author and genre
+        console.log("Looking for books by author and genre", args.author, args.genre)
+        books = Book.find({
+          author: author._id,
+          genres: { $in: args.genre },
+        }).populate('author')
+      } else if (args.author && !args.genre) {
+        // Find books by author
+        console.log("Looking for books by author", args.author)
+        books = Book.find({
           author: author._id,
         }).populate('author')
+      } else if (args.genre && !args.author) {
+        // Find books by genre
+        console.log("Looking for books by genre", args.genre)
+        books = Book.find({
+          genres: { $in: args.genre },
+        }).populate('author')
+      } else {
+        // Find all books
+        console.log("Looking for all books")
+        books = Book.find({}).populate('author')
       }
 
-      return Book.find({
-        author: author._id,
-        genres: { $in: args.genre },
-      }).populate('author')
+      return books
     },
     allAuthors: (root, args) => {
       return Author.find({})
@@ -141,6 +154,7 @@ const resolvers = {
         })
       }
 
+      pubsub.publish('BOOK_ADDED', { bookAdded: book })
       return book
     },
     editAuthor: async (root, args, { currentUser }) => {
@@ -201,6 +215,9 @@ const resolvers = {
       return { value: jwt.sign(userForToken, JWT_SECRET) }
     },
   },
+  Subscription: {
+    bookAdded: { subscribe: () => pubsub.asyncIterator(['BOOK_ADDED']) },
+  },
 }
 
 const server = new ApolloServer({
@@ -216,6 +233,7 @@ const server = new ApolloServer({
   },
 })
 
-server.listen().then(({ url }) => {
+server.listen().then(({ url, subscriptionsUrl }) => {
   console.log(`🚀 Server ready at ${url}`)
+  console.log(`📡 Subscriptions ready at ${subscriptionsUrl}`)
 })
