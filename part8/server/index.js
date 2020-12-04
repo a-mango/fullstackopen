@@ -8,6 +8,8 @@ const {
 } = require('apollo-server')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
+const DataLoader = require('dataloader')
+const _countBy = require('lodash.countby')
 const Book = require('./models/book')
 const Author = require('./models/author')
 const User = require('./models/user')
@@ -91,26 +93,22 @@ const resolvers = {
 
       if (args.author && args.genre) {
         // Find books by author and genre
-        console.log("Looking for books by author and genre", args.author, args.genre)
         books = Book.find({
           author: author._id,
           genres: { $in: args.genre },
         }).populate('author')
       } else if (args.author && !args.genre) {
         // Find books by author
-        console.log("Looking for books by author", args.author)
         books = Book.find({
           author: author._id,
         }).populate('author')
       } else if (args.genre && !args.author) {
         // Find books by genre
-        console.log("Looking for books by genre", args.genre)
         books = Book.find({
           genres: { $in: args.genre },
         }).populate('author')
       } else {
         // Find all books
-        console.log("Looking for all books")
         books = Book.find({}).populate('author')
       }
 
@@ -124,9 +122,8 @@ const resolvers = {
     },
   },
   Author: {
-    bookCount: async root => {
-      const author = await Author.findOne({ name: root.name })
-      return Book.countDocuments({ author: author._id })
+    bookCount: async (root, args, { bookCountLoader }) => {
+      return bookCountLoader.load(root.id.toString())
     },
   },
   Mutation: {
@@ -220,16 +217,33 @@ const resolvers = {
   },
 }
 
+const createBookCountLoader = () => {
+  return new DataLoader(async authorIds => {
+    const books = await Book.find({})
+    const booksByAuthorId = books.map(book => book.author)
+
+    // Regroup books by author id
+    const authorIdCounts = _countBy(booksByAuthorId, id => id)
+
+    // Map authorIdCounts to authorIds
+    return authorIds.map(id => authorIdCounts[id] || 0)
+  })
+}
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: async ({ req }) => {
+    const bookCountLoader = createBookCountLoader()
+
     const auth = req ? req.headers.authorization : null
     if (auth && auth.toLowerCase().startsWith('bearer ')) {
       const decodedToken = jwt.verify(auth.substring(7), JWT_SECRET)
       const currentUser = await User.findById(decodedToken.id)
-      return { currentUser }
+      return { bookCountLoader, currentUser }
     }
+
+    return { bookCountLoader }
   },
 })
 
