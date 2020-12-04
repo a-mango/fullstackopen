@@ -17,7 +17,6 @@ const Recommend = props => {
 
   useEffect(() => {
     if (booksQuery.data) {
-      console.log(booksQuery.data)
       setBooks(booksQuery.data.allBooks)
     }
   }, [booksQuery])
