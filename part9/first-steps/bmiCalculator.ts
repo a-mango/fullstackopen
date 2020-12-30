@@ -19,6 +19,28 @@ type BmiCategory =
   | 'Obese Class II (Severely obese)'
   | 'Obese Class III (Very severely obese)';
 
+interface InputValues {
+  height: number;
+  mass: number;
+}
+
+/**
+ *
+ * @param args
+ */
+const parseArguments = (args: Array<string>): InputValues => {
+  if (args.length !== 4) throw new Error('Invalid arguments');
+
+  if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
+    return {
+      height: Number(args[2]),
+      mass: Number(args[3]),
+    };
+  } else {
+    throw new Error('Provided values were not numbers');
+  }
+};
+
 /**
  * Categorize BMI based on height and mass
  *
@@ -34,7 +56,7 @@ const calculateBmi = (height: number, mass: number): BmiCategory => {
   }
 
   // Calculate bmi value with formula mass (kg) divided by height (m) squared
-  const bmi = mass / ((height / 100) ^ 2);
+  const bmi = mass / ((height / 100) ** 2);
 
   // Categorize bmi value using if/elif/else structure
   if (bmi <= 15) {
@@ -56,8 +78,12 @@ const calculateBmi = (height: number, mass: number): BmiCategory => {
   }
 };
 
+/**
+ * Run the script with input arguments
+ */
 try {
-  console.log(calculateBmi(180, 74));
+  const { height, mass } : InputValues = parseArguments(process.argv);
+  console.log(calculateBmi(height, mass));
 } catch (error) {
-  console.error(`Oops, an error occured. Message:\n${error.message}`);
+  console.error(`An error occured. Message:\n${error.message}`);
 }
