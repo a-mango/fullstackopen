@@ -19,7 +19,7 @@ type BmiCategory =
   | 'Obese Class II (Severely obese)'
   | 'Obese Class III (Very severely obese)';
 
-interface InputValues {
+interface BmiInputValues {
   height: number;
   mass: number;
 }
@@ -28,7 +28,7 @@ interface InputValues {
  *
  * @param args
  */
-const parseArguments = (args: Array<string>): InputValues => {
+const parseBmiArguments = (args: Array<string>): BmiInputValues => {
   if (args.length !== 4) throw new Error('Invalid arguments');
 
   if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
@@ -82,7 +82,7 @@ const calculateBmi = (height: number, mass: number): BmiCategory => {
  * Run the script with input arguments
  */
 try {
-  const { height, mass } : InputValues = parseArguments(process.argv);
+  const { height, mass } : BmiInputValues = parseBmiArguments(process.argv);
   console.log(calculateBmi(height, mass));
 } catch (error) {
   console.error(`An error occured. Message:\n${error.message}`);
