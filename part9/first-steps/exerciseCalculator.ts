@@ -27,6 +27,36 @@ interface ExerciseResult {
   average: number;
 }
 
+interface ExerciseInputValues {
+  targetAmount: number;
+  dailyExerciseHours: Array<number>;
+}
+
+/**
+ * Parse the arguments
+ * @param args
+ */
+const parseExerciseInput = (args: Array<string>): ExerciseInputValues => {
+  // Check arguments length
+  if (args.length < 4) throw new Error('Not enough arguments');
+
+  // Destructure exercise input values into a new array
+  const [a, b, ...inputValues] = args;
+
+  if (inputValues.some((i) => !isNaN(+i))) {
+    const [targetAmount, ...dailyExerciseHours] = inputValues;
+    return {
+      targetAmount: +targetAmount,
+      dailyExerciseHours: dailyExerciseHours.map((i) => +i),
+    };
+  } else {
+    throw new Error('Provided values were not numbers');
+  }
+};
+
+/**
+ * Calculate exercise session result
+ */
 const calculateExercises = (
   dailyExerciseHours: Array<number>,
   targetAmount: number
@@ -64,8 +94,12 @@ const calculateExercises = (
   return result;
 };
 
+/**
+ * Run the script with input parameters
+ */
 try {
-  console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+  const {targetAmount, dailyExerciseHours} = parseExerciseInput(process.argv)
+  console.log(calculateExercises(dailyExerciseHours, targetAmount));
 } catch (error) {
   console.error(`Oops, an error occured. Message:\n${error.message}`);
 }
