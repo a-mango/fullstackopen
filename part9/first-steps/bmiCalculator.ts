@@ -45,18 +45,18 @@ const parseBmiArguments = (args: Array<string>): BmiInputValues => {
  * Categorize BMI based on height and mass
  *
  * @param height The height in centimeters
- * @param mass The mass in kilogram
+ * @param weight The weight in kilogram
  *
  * @returns A message representing the BMI category
  */
-const calculateBmi = (height: number, mass: number): BmiCategory => {
+export const calculateBmi = (height: number, weight: number): BmiCategory => {
   // Check the arguments
-  if (height <= 0 || mass <= 0) {
+  if (height <= 0 || weight <= 0) {
     throw new Error('Height and mass must be greater than 0');
   }
 
   // Calculate bmi value with formula mass (kg) divided by height (m) squared
-  const bmi = mass / ((height / 100) ** 2);
+  const bmi = weight / ((height / 100) ** 2);
 
   // Categorize bmi value using if/elif/else structure
   if (bmi <= 15) {
