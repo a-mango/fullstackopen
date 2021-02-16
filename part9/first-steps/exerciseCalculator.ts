@@ -17,7 +17,7 @@
 /**
  * The result of the exercise session
  */
-interface ExerciseResult {
+export interface ExerciseResult {
   periodLength: number;
   trainingDays: number;
   success: boolean;
@@ -27,7 +27,7 @@ interface ExerciseResult {
   average: number;
 }
 
-interface ExerciseInputValues {
+export interface ExerciseInputValues {
   targetAmount: number;
   dailyExerciseHours: Array<number>;
 }
@@ -38,10 +38,11 @@ interface ExerciseInputValues {
  */
 const parseExerciseInput = (args: Array<string>): ExerciseInputValues => {
   // Check arguments length
-  if (args.length < 4) throw new Error('Not enough arguments');
+  if (args.length < 4) throw new Error("Not enough arguments");
 
   // Destructure exercise input values into a new array
-  const [a, b, ...inputValues] = args;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [, , ...inputValues] = args;
 
   if (inputValues.some((i) => !isNaN(+i))) {
     const [targetAmount, ...dailyExerciseHours] = inputValues;
@@ -50,14 +51,14 @@ const parseExerciseInput = (args: Array<string>): ExerciseInputValues => {
       dailyExerciseHours: dailyExerciseHours.map((i) => +i),
     };
   } else {
-    throw new Error('Provided values were not numbers');
+    throw new Error("Provided values were not numbers");
   }
 };
 
 /**
  * Calculate exercise session result
  */
-const calculateExercises = (
+export const calculateExercises = (
   dailyExerciseHours: Array<number>,
   targetAmount: number
 ): ExerciseResult => {
@@ -71,14 +72,14 @@ const calculateExercises = (
   let ratingDescription: string;
   if (average <= targetAmount / 2) {
     rating = 1;
-    ratingDescription = 'You need to put more effort in this!';
+    ratingDescription = "You need to put more effort in this!";
   } else if (average > targetAmount / 2 && average < targetAmount) {
     rating = 2;
-    ratingDescription = 'A little more effort next time. Keep it up!';
+    ratingDescription = "A little more effort next time. Keep it up!";
   } else {
     rating = 3;
     ratingDescription =
-      'Well done, you reached you target amout of daily exercise hours!';
+      "Well done, you reached you target amout of daily exercise hours!";
   }
 
   const result: ExerciseResult = {
@@ -98,8 +99,9 @@ const calculateExercises = (
  * Run the script with input parameters
  */
 try {
-  const {targetAmount, dailyExerciseHours} = parseExerciseInput(process.argv)
+  const { targetAmount, dailyExerciseHours } = parseExerciseInput(process.argv);
   console.log(calculateExercises(dailyExerciseHours, targetAmount));
-} catch (error) {
-  console.error(`Oops, an error occured. Message:\n${error.message}`);
+} catch ({ message }) {
+  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+  console.error(`Oops, an error occured. Message:\n${message}`);
 }
