@@ -1,8 +1,8 @@
-import patientData from "../../data/patients.json";
+import patientData from "../../data/patients";
 import { Patient, NonSensitivePatient, NewPatient } from "../types";
 import uuid = require("uuid");
 
-const patients: Array<Patient> = patientData as Array<Patient>;
+const patients: Array<Patient> = patientData;
 
 /**
  * Get all patient entries as non-sensitive patients
