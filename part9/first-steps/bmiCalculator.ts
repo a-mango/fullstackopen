@@ -10,14 +10,14 @@
  * Range of BMI values valid as statistical categories
  */
 type BmiCategory =
-  | 'Very severely underweight'
-  | 'Severely underweight'
-  | 'Underweight'
-  | 'Normal (healthy weight)'
-  | 'Overweight'
-  | 'Obese Class I (Moderately obese)'
-  | 'Obese Class II (Severely obese)'
-  | 'Obese Class III (Very severely obese)';
+  | "Very severely underweight"
+  | "Severely underweight"
+  | "Underweight"
+  | "Normal (healthy weight)"
+  | "Overweight"
+  | "Obese Class I (Moderately obese)"
+  | "Obese Class II (Severely obese)"
+  | "Obese Class III (Very severely obese)";
 
 interface BmiInputValues {
   height: number;
@@ -29,7 +29,7 @@ interface BmiInputValues {
  * @param args
  */
 const parseBmiArguments = (args: Array<string>): BmiInputValues => {
-  if (args.length !== 4) throw new Error('Invalid arguments');
+  if (args.length !== 4) throw new Error("Invalid arguments");
 
   if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
     return {
@@ -37,7 +37,7 @@ const parseBmiArguments = (args: Array<string>): BmiInputValues => {
       mass: Number(args[3]),
     };
   } else {
-    throw new Error('Provided values were not numbers');
+    throw new Error("Provided values were not numbers");
   }
 };
 
@@ -52,29 +52,29 @@ const parseBmiArguments = (args: Array<string>): BmiInputValues => {
 export const calculateBmi = (height: number, weight: number): BmiCategory => {
   // Check the arguments
   if (height <= 0 || weight <= 0) {
-    throw new Error('Height and mass must be greater than 0');
+    throw new Error("Height and mass must be greater than 0");
   }
 
   // Calculate bmi value with formula mass (kg) divided by height (m) squared
-  const bmi = weight / ((height / 100) ** 2);
+  const bmi = weight / (height / 100) ** 2;
 
   // Categorize bmi value using if/elif/else structure
   if (bmi <= 15) {
-    return 'Very severely underweight';
+    return "Very severely underweight";
   } else if (bmi <= 16) {
-    return 'Severely underweight';
+    return "Severely underweight";
   } else if (bmi <= 18.5) {
-    return 'Underweight';
+    return "Underweight";
   } else if (bmi <= 25) {
-    return 'Normal (healthy weight)';
+    return "Normal (healthy weight)";
   } else if (bmi <= 30) {
-    return 'Overweight';
+    return "Overweight";
   } else if (bmi <= 35) {
-    return 'Obese Class I (Moderately obese)';
+    return "Obese Class I (Moderately obese)";
   } else if (bmi <= 40) {
-    return 'Obese Class II (Severely obese)';
+    return "Obese Class II (Severely obese)";
   } else {
-    return 'Obese Class III (Very severely obese)';
+    return "Obese Class III (Very severely obese)";
   }
 };
 
@@ -82,7 +82,7 @@ export const calculateBmi = (height: number, weight: number): BmiCategory => {
  * Run the script with input arguments
  */
 try {
-  const { height, mass } : BmiInputValues = parseBmiArguments(process.argv);
+  const { height, mass }: BmiInputValues = parseBmiArguments(process.argv);
   console.log(calculateBmi(height, mass));
 } catch (error) {
   console.error(`An error occured. Message:\n${error.message}`);
