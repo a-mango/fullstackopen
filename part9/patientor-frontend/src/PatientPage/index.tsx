@@ -5,7 +5,7 @@ import { Container } from "semantic-ui-react";
 
 import { Patient } from "../types";
 import { apiBaseUrl } from "../constants";
-import { useStateValue } from "../state";
+import { useStateValue, addPatient } from "../state";
 
 import PatientDetail from "./PatientDetail";
 
@@ -19,11 +19,11 @@ const PatientPage: React.FC = () => {
     if (!patients[id] || !patients[id].ssn) {
       const fetchPatient = async () => {
         try {
-          const { data } = await axios.get<Patient>(
+          const { data: newPatient } = await axios.get<Patient>(
             `${apiBaseUrl}/patients/${id}`
           );
-          dispatch({ type: "ADD_PATIENT", payload: data });
-          setPatient(data);
+          dispatch(addPatient(newPatient));
+          setPatient(newPatient);
         } catch (e) {
           console.error(e.response.data);
           setPatient(null);
