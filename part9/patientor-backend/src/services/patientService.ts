@@ -1,5 +1,5 @@
 import patientData from '../../data/patients.json';
-import { Patient, NonSensitivePatient, Gender } from '../types';
+import { Patient, NonSensitivePatient, NewPatient } from '../types';
 import uuid = require('uuid');
 
 const patients: Array<Patient> = patientData as Array<Patient>;
@@ -17,14 +17,14 @@ const getNonSensitivePatients = (): Array<NonSensitivePatient> => {
   }));
 };
 
-const addPatient = (name: string, dateOfBirth: string, ssn: string, gender:Gender, occupation:string): Patient => {
+/**
+ * Add a new patient to the store
+ * @param patient The patient to add
+ */
+const addPatient = (patient: NewPatient): Patient => {
   const newPatient = {
     id: uuid.v4(),
-    name, 
-    dateOfBirth, 
-    ssn,
-    gender, 
-    occupation
+    ...patient,
   };
 
   patients.push(newPatient);
@@ -34,5 +34,5 @@ const addPatient = (name: string, dateOfBirth: string, ssn: string, gender:Gende
 
 export default {
   getNonSensitivePatients,
-  addPatient
+  addPatient,
 };
