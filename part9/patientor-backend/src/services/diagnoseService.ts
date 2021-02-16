@@ -4,7 +4,7 @@ import { Diagnose } from '../types';
 const diagnoses: Array<Diagnose> = diagnoseData as Array<Diagnose>;
 
 /**
- * Get all the diagnostic entries
+ * Get all diagnostic entries
  */
 const getEntries = (): Array<Diagnose> => {
   return diagnoses;
