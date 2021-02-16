@@ -1,5 +1,6 @@
 import patientData from '../../data/patients.json';
-import { Patient, NonSensitivePatient } from '../types';
+import { Patient, NonSensitivePatient, Gender } from '../types';
+import uuid = require('uuid');
 
 const patients: Array<Patient> = patientData as Array<Patient>;
 
@@ -16,6 +17,22 @@ const getNonSensitivePatients = (): Array<NonSensitivePatient> => {
   }));
 };
 
+const addPatient = (name: string, dateOfBirth: string, ssn: string, gender:Gender, occupation:string): Patient => {
+  const newPatient = {
+    id: uuid.v4(),
+    name, 
+    dateOfBirth, 
+    ssn,
+    gender, 
+    occupation
+  };
+
+  patients.push(newPatient);
+
+  return newPatient;
+};
+
 export default {
   getNonSensitivePatients,
+  addPatient
 };
