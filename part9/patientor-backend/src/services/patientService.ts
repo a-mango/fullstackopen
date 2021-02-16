@@ -1,6 +1,6 @@
-import patientData from '../../data/patients.json';
-import { Patient, NonSensitivePatient, NewPatient } from '../types';
-import uuid = require('uuid');
+import patientData from "../../data/patients.json";
+import { Patient, NonSensitivePatient, NewPatient } from "../types";
+import uuid = require("uuid");
 
 const patients: Array<Patient> = patientData as Array<Patient>;
 
@@ -8,13 +8,16 @@ const patients: Array<Patient> = patientData as Array<Patient>;
  * Get all patient entries as non-sensitive patients
  */
 const getNonSensitivePatients = (): Array<NonSensitivePatient> => {
-  return patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
-    id,
-    name,
-    dateOfBirth,
-    gender,
-    occupation,
-  }));
+  return patients.map(
+    ({ id, name, dateOfBirth, gender, entries, occupation }) => ({
+      id,
+      name,
+      dateOfBirth,
+      gender,
+      entries,
+      occupation,
+    })
+  );
 };
 
 /**
@@ -32,7 +35,17 @@ const addPatient = (patient: NewPatient): Patient => {
   return newPatient;
 };
 
+/**
+ * Find a patiend by id
+ * @param id The id of the patient to find
+ */
+const findPatientById = (id: string): Patient | undefined => {
+  const patient = patients.find((p) => p.id === id);
+  return patient;
+};
+
 export default {
   getNonSensitivePatients,
   addPatient,
+  findPatientById,
 };
