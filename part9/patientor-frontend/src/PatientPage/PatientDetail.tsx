@@ -1,6 +1,6 @@
 import React from "react";
 import { Patient } from "../types";
-import { Table, Icon } from "semantic-ui-react";
+import { Header, Table, Icon } from "semantic-ui-react";
 
 const genderIcon = {
   male: { name: "mars" as "mars", color: "blue" as "blue" },
@@ -17,32 +17,37 @@ const PatientDetail: React.FC<Patient> = ({
   occupation,
 }) => {
   return (
-    <Table definition color="blue">
-      <Table.Body>
-        <Table.Row>
-          <Table.Cell>File #</Table.Cell>
-          <Table.Cell>{id}</Table.Cell>
-        </Table.Row>
-        <Table.Row>
-          <Table.Cell>Name</Table.Cell>
-          <Table.Cell>
-            {name} <Icon {...genderIcon[gender]} />
-          </Table.Cell>
-        </Table.Row>
-        <Table.Row>
-          <Table.Cell>Date of birth</Table.Cell>
-          <Table.Cell>{dateOfBirth || "Unknown"}</Table.Cell>
-        </Table.Row>
-        <Table.Row>
-          <Table.Cell>SSN</Table.Cell>
-          <Table.Cell>{ssn}</Table.Cell>
-        </Table.Row>
-        <Table.Row>
-          <Table.Cell>Occupation</Table.Cell>
-          <Table.Cell>{occupation}</Table.Cell>
-        </Table.Row>
-      </Table.Body>
-    </Table>
+    <>
+      <Header as="h4" block attached="top">
+        Personal informations
+      </Header>
+      <Table color="blue" attached="bottom">
+        <Table.Body>
+          <Table.Row>
+            <Table.Cell>File #</Table.Cell>
+            <Table.Cell>{id}</Table.Cell>
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell>Name</Table.Cell>
+            <Table.Cell>
+              {name} <Icon {...genderIcon[gender]} />
+            </Table.Cell>
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell>Date of birth</Table.Cell>
+            <Table.Cell>{dateOfBirth || "Unknown"}</Table.Cell>
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell>SSN</Table.Cell>
+            <Table.Cell>{ssn}</Table.Cell>
+          </Table.Row>
+          <Table.Row>
+            <Table.Cell>Occupation</Table.Cell>
+            <Table.Cell>{occupation}</Table.Cell>
+          </Table.Row>
+        </Table.Body>
+      </Table>
+    </>
   );
 };
 

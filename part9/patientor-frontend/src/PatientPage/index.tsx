@@ -1,13 +1,14 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Container } from "semantic-ui-react";
+import { Container, Header } from "semantic-ui-react";
 
 import { Patient } from "../types";
 import { apiBaseUrl } from "../constants";
 import { useStateValue, addPatient } from "../state";
 
 import PatientDetail from "./PatientDetail";
+import EntryList from "./EntryList";
 
 const PatientPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -41,9 +42,12 @@ const PatientPage: React.FC = () => {
 
   return (
     <div className="App">
-      <Container text textAlign="center">
-        <h3>Patient detail</h3>
+      <Container text>
+        <Header as="h3" textAlign="center">
+          Personal detail
+        </Header>
         <PatientDetail {...patient} />
+        <EntryList entries={patient.entries} />
       </Container>
     </div>
   );
