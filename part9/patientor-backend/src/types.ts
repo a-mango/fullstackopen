@@ -55,10 +55,10 @@ export type Diagnosis = {
 export type Patient = {
   id: string;
   name: string;
-  dateOfBirth: string;
-  ssn: string;
-  gender: Gender;
   occupation: string;
+  gender: Gender;
+  ssn?: string;
+  dateOfBirth?: string;
   entries: Entry[];
 };
 
